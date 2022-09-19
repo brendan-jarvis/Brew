@@ -27,10 +27,12 @@ function RandomBeer() {
   const randomBeer = useSelector((state) => state.randomBeer)
   const [isFavourite, setIsFavourite] = useState('secondary')
 
-  const handleFavourite = () => {
+  const handleFavourite = (e) => {
     const beer = { brewdog_id: randomBeer[0].id, name: randomBeer[0].name }
 
-    setIsFavourite('success' + ',disabled')
+    e.target.innerHTML = 'Saved to favourites!'
+
+    setIsFavourite('success' + ' disabled')
 
     dispatch(addFavourite(beer))
   }

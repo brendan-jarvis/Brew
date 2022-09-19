@@ -17,6 +17,8 @@ function RandomBeer() {
 
     e.target.className = 'btn btn-success disabled'
 
+    e.target.innerText = 'Saved to favourites!'
+
     dispatch(addFavourite(beer))
   }
 
