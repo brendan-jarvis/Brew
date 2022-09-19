@@ -37,7 +37,9 @@ function RandomBeer() {
           <div key={Hash(beer.id + beer.name)}>
             <Stack>
               <h3 className="text-center">
-                #{beer.id} {beer.name}
+                <a href={`/beer/${beer.id}`} className="link-dark">
+                  #{beer.id} {beer.name}
+                </a>
               </h3>
               <Button
                 variant="secondary"

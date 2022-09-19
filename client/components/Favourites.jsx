@@ -43,7 +43,11 @@ function Favourites() {
               <tr key={Hash(beer.id + beer.name)}>
                 <td>{beer.id}</td>
                 <td>{beer.brewdog_id}</td>
-                <td>{beer.name}</td>
+                <td>
+                  <a href={`/beer/${beer.brewdog_id}`} className="link-dark">
+                    {beer.name}
+                  </a>
+                </td>
                 <td>{new Date(beer.created_at).toLocaleDateString()}</td>
                 <td>
                   {/* <label htmlFor={beer.name + 'brewed'} hidden>

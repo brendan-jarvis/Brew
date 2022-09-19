@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { Link, NavLink, useNavigate, Routes, Route } from 'react-router-dom'
+import React from 'react'
+import { Routes, Route } from 'react-router-dom'
 
 import Nav from './Nav'
 import Home from './Home'
@@ -8,6 +8,7 @@ import SearchForm from './SearchForm'
 import ErrorMessage from './ErrorMessage'
 import RandomBeer from './RandomBeer'
 import Settings from './Settings'
+import Beer from './Beer'
 
 function App() {
   return (
@@ -23,6 +24,9 @@ function App() {
           <Route path="/search" element={<SearchForm />} />
           <Route path="/random" element={<RandomBeer />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/beer/">
+            <Route path=":id" element={<Beer />} />
+          </Route>
         </Routes>
       </div>
     </>

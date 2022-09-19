@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Box, Switch, FormControlLabel } from '@mui/material'
 import { Button, Form, Table } from 'react-bootstrap'
 
 import { fetchRandomBeer, addFavourite, getSettings } from '../actions'
