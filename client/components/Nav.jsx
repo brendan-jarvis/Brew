@@ -6,39 +6,35 @@ import ScienceIcon from '@mui/icons-material/Science'
 
 function App() {
   return (
-    <Navbar sticky="top" bg="light" variant="light" expand="lg">
+    <Navbar
+      collapseOnSelect
+      sticky="top"
+      bg="light"
+      expand="lg"
+      onSelect={() => ({
+        collapsed: 'true',
+      })}
+    >
       <Container>
-        <Navbar.Brand href="/">
+        <Navbar.Brand as={NavLink} to="/">
           <ScienceIcon />
           Brew!
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
+        <Navbar.Collapse>
           <Nav className="me-auto">
-            <NavLink
-              to="/favourites"
-              style={({ isActive }) =>
-                isActive ? { color: 'hotpink' } : { color: 'black' }
-              }
-            >
+            <Nav.Link as={NavLink} to="/favourites">
               Favourites
-            </NavLink>
-            <NavLink
-              to="/search"
-              style={({ isActive }) =>
-                isActive ? { color: 'hotpink' } : { color: 'black' }
-              }
-            >
+            </Nav.Link>
+            <Nav.Link as={NavLink} to="/search">
               Search
-            </NavLink>
-            <NavLink
-              to="/random"
-              style={({ isActive }) =>
-                isActive ? { color: 'hotpink' } : { color: 'black' }
-              }
-            >
+            </Nav.Link>
+            <Nav.Link as={NavLink} to="/random">
               Random
-            </NavLink>
+            </Nav.Link>
+            <Nav.Link as={NavLink} to="/settings">
+              Settings
+            </Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>

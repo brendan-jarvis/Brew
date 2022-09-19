@@ -10,14 +10,14 @@ jest.mock('../actions')
 
 fetchFavourites.mockImplementation(() => () => {})
 
-test('page header includes favourites', () => {
+test('App header includes Brew!', () => {
   render(
     <Provider store={store}>
       <App />
     </Provider>
   )
   const heading = screen.getByRole('heading')
-  expect(heading.innerHTML).toMatch(/Favourites/)
+  expect(heading.innerHTML).toMatch('Brew!')
 })
 
 test('renders an <li> for each favourite', () => {

@@ -6,6 +6,8 @@ import {
   editFavouriteApi,
 } from '../apis/favouritesApi'
 
+import { getSettingsApi, editSettingsApi } from '../apis/settingsApi'
+
 export const REQUEST_BEER = 'REQUEST_BEER'
 export const RECEIVE_BEER = 'RECEIVE_BEER'
 
@@ -20,6 +22,10 @@ export const SHOW_FAVOURITES = 'SHOW_FAVOURITES'
 export const SAVE_FAVOURITE = 'SAVE_FAVOURITE'
 export const DEL_FAVOURITE = 'DEL_FAVOURITE'
 export const EDIT_FAVOURITES = 'EDIT_FAVOURITES'
+
+export const FETCH_SETTINGS = 'FETCH_SETTINGS'
+export const UPDATE_SETTINGS = 'UPDATE_SETTINGS'
+export const RECEIVE_SETTINGS = 'RECEIVE_SETTINGS'
 
 export function requestBeer() {
   return {
@@ -57,6 +63,25 @@ export function showError(errorMessage) {
 export function fetchFavourites() {
   return {
     type: FETCH_FAVOURITES,
+  }
+}
+
+export function fetchSettings() {
+  return {
+    type: FETCH_SETTINGS,
+  }
+}
+
+export function receiveSettings(results) {
+  return {
+    type: RECEIVE_SETTINGS,
+    payload: results,
+  }
+}
+
+export function updateSettings() {
+  return {
+    type: UPDATE_SETTINGS,
   }
 }
 
@@ -189,6 +214,30 @@ export function editFavourite(id, beer) {
     try {
       const res = await editFavouriteApi(id, beer)
       return dispatch(getFavourites())
+    } catch (err) {
+      dispatch(showError(err.message))
+    }
+  }
+}
+
+export function getSettings() {
+  return async (dispatch) => {
+    dispatch(fetchSettings())
+    try {
+      const res = await getSettingsApi()
+      return dispatch(receiveSettings(res))
+    } catch (err) {
+      dispatch(showError(err.message))
+    }
+  }
+}
+
+export function editSettings(settings) {
+  return async (dispatch) => {
+    dispatch(updateSettings())
+    try {
+      const res = await editSettingsApi(settings)
+      return dispatch(getSettings())
     } catch (err) {
       dispatch(showError(err.message))
     }
