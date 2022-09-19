@@ -3,6 +3,7 @@ const path = require('path')
 
 const favouritesRoutes = require('./routes/favourites')
 const settingsRoutes = require('./routes/settings')
+const beerRoutes = require('./routes/beer')
 
 const server = express()
 
@@ -11,6 +12,7 @@ server.use(express.static(path.join(__dirname, 'public')))
 
 server.use('/api/v1/favourites', favouritesRoutes)
 server.use('/api/v1/settings', settingsRoutes)
+server.use('/api/v1/beer', beerRoutes)
 server.get('*', (req, res) => {
   res.sendFile(path.resolve('server/public/index.html'))
 })
