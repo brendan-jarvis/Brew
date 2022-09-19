@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Box, Switch, FormControlLabel } from '@mui/material'
 import { Button, Form, Table } from 'react-bootstrap'
 
-import { fetchRandomBeer, addFavourite, getFavourites } from '../actions'
+import { fetchRandomBeer, addFavourite, getSettings } from '../actions'
 
 import {
   SRMToRGBCSS,
@@ -17,18 +17,14 @@ import {
 import Hash from 'hash-string'
 
 function RandomBeer() {
-  const favourites = useSelector((state) => state.favourites)
+  const settings = useSelector((state) => state.settings)
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(getFavourites())
+    dispatch(getSettings())
   }, [])
 
   const randomBeer = useSelector((state) => state.randomBeer)
-  const [imperialTemp, setImperialTemp] = useState(false)
-  const [imperialUnits, setImperialUnits] = useState(false)
-  const [ounces, setOunces] = useState(false)
-  const [kcal, setKcal] = useState(false)
   const [isFavourite, setIsFavourite] = useState('secondary')
 
   const handleFavourite = () => {
@@ -47,56 +43,6 @@ function RandomBeer() {
 
   return (
     <div className="container text-center">
-      <Box>
-        <Form>
-          <Form.Group>
-            <FormControlLabel
-              control={
-                <Switch
-                  aria-label="Fahrenheit"
-                  checked={imperialTemp}
-                  onChange={() => setImperialTemp(!imperialTemp)}
-                  color="primary"
-                />
-              }
-              label="Fahrenheit"
-            />
-            <FormControlLabel
-              control={
-                <Switch
-                  aria-label="Imperial Units"
-                  checked={imperialUnits}
-                  onChange={() => setImperialUnits(!imperialUnits)}
-                  color="primary"
-                />
-              }
-              label="Imperial Units"
-            />
-            <FormControlLabel
-              control={
-                <Switch
-                  aria-label="Ounces"
-                  checked={ounces}
-                  onChange={() => setOunces(!ounces)}
-                  color="primary"
-                />
-              }
-              label="Ounces"
-            />
-            <FormControlLabel
-              control={
-                <Switch
-                  aria-label="Calories"
-                  checked={kcal}
-                  onChange={() => setKcal(!kcal)}
-                  color="primary"
-                />
-              }
-              label="Calories"
-            />
-          </Form.Group>
-        </Form>
-      </Box>
       <Form>
         <Button variant="primary" onClick={handleSubmit}>
           Fetch Random Recipe
@@ -180,7 +126,7 @@ function RandomBeer() {
                     </th>
                     <th>Boil Volume</th>
                     <th>Final Volume</th>
-                    {imperialUnits ? (
+                    {settings.imperial_units ? (
                       <th>Energy (12 oz)</th>
                     ) : (
                       <th>Energy (355mL)</th>
@@ -190,7 +136,7 @@ function RandomBeer() {
                     <td>{beer.target_og / 1000} SG</td>
                     <td>{beer.target_fg / 1000} SG</td>
                     <td>{beer.ibu}</td>
-                    {imperialUnits ? (
+                    {settings.imperial_units ? (
                       <td>
                         {convertLitresToGallons(
                           beer.boil_volume.value
@@ -202,7 +148,7 @@ function RandomBeer() {
                         {beer.boil_volume.value} {beer.boil_volume.unit}
                       </td>
                     )}
-                    {imperialUnits ? (
+                    {settings.imperial_units ? (
                       <td>
                         {convertLitresToGallons(
                           beer.volume.value
@@ -214,7 +160,7 @@ function RandomBeer() {
                         {beer.volume.value} {beer.volume.unit}
                       </td>
                     )}
-                    {kcal ? (
+                    {settings.calories ? (
                       <td>
                         {calories.toLocaleString({ maximumFractionDigits: 2 })}
                         {' kcal'}
@@ -250,7 +196,7 @@ function RandomBeer() {
                     return (
                       <tr key={Hash(malt.name + malt.amount.value)}>
                         <th scope="col">{malt.name}</th>
-                        {imperialUnits ? (
+                        {settings.imperial_units ? (
                           <td>
                             {convertKilogramsToPounds(
                               malt.amount.value
@@ -299,7 +245,7 @@ function RandomBeer() {
                             {hop.name}
                           </a>
                         </th>
-                        {ounces ? (
+                        {settings.ounces ? (
                           <td>
                             {convertGToOz(hop.amount.value).toLocaleString({
                               maximumFractionDigits: 2,
@@ -337,7 +283,7 @@ function RandomBeer() {
                           mash.temp.value + mash.temp.unit + mash.duration
                         )}
                       >
-                        {imperialTemp ? (
+                        {settings.imperial_temperature ? (
                           <td>{convertCToF(mash.temp.value)} °F</td>
                         ) : (
                           <td>{mash.temp.value} °C</td>
