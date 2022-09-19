@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Button, Form, Table } from 'react-bootstrap'
+import { Button, Table } from 'react-bootstrap'
 
-import { fetchRandomBeer, addFavourite, getSettings } from '../actions'
+import { fetchBeer, addFavourite, getSettings } from '../actions'
 
 import {
   SRMToRGBCSS,
@@ -15,19 +15,21 @@ import {
 
 import Hash from 'hash-string'
 
-function RandomBeer() {
+function Beer() {
   const settings = useSelector((state) => state.settings)
   const dispatch = useDispatch()
+
+  console.log('Entered the Beer.jsx component')
 
   useEffect(() => {
     dispatch(getSettings())
   }, [])
 
-  const randomBeer = useSelector((state) => state.randomBeer)
+  const beer = useSelector((state) => state.beer)
   const [isFavourite, setIsFavourite] = useState('secondary')
 
   const handleFavourite = (e) => {
-    const beer = { brewdog_id: randomBeer[0].id, name: randomBeer[0].name }
+    const beer = { brewdog_id: beer[0].id, name: beer[0].name }
 
     e.target.innerHTML = 'Saved to favourites!'
 
@@ -36,20 +38,9 @@ function RandomBeer() {
     dispatch(addFavourite(beer))
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-
-    dispatch(fetchRandomBeer())
-  }
-
   return (
     <div className="container text-center">
-      <Form>
-        <Button variant="primary" onClick={handleSubmit}>
-          Fetch Random Recipe
-        </Button>
-      </Form>
-      {randomBeer?.map((beer) => {
+      {beer?.map((beer) => {
         const calories = calcCalories(
           beer.target_og / 1000,
           beer.target_fg / 1000
@@ -323,4 +314,4 @@ function RandomBeer() {
   )
 }
 
-export default RandomBeer
+export default Beer

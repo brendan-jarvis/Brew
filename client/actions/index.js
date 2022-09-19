@@ -158,8 +158,6 @@ export function searchBeerRecipes(query) {
     queryString.push(`&beer_name=${query.search}`)
   }
 
-  console.log(`https://api.punkapi.com/v2/beers?${queryString.join('&')}`)
-
   return async (dispatch) => {
     dispatch(requestSearch())
     try {
