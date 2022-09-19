@@ -5,6 +5,7 @@ import searchBeerRecipes from './searchBeerRecipes'
 import errorMessage from './errorMessage'
 import favourites from './favourites'
 import settings from './settings'
+import beer from './beer'
 
 export default combineReducers({
   randomBeer,
@@ -12,4 +13,5 @@ export default combineReducers({
   favourites,
   errorMessage,
   settings,
+  beer,
 })

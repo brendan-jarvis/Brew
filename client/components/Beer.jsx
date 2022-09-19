@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Button, Table } from 'react-bootstrap'
+import { Button, Table, Spinner } from 'react-bootstrap'
+import { useParams } from 'react-router-dom'
 
-import { fetchBeer, addFavourite, getSettings } from '../actions'
+import { fetchABeer, addFavourite, getSettings } from '../actions'
 
 import {
   SRMToRGBCSS,
@@ -19,10 +20,11 @@ function Beer() {
   const settings = useSelector((state) => state.settings)
   const dispatch = useDispatch()
 
-  console.log('Entered the Beer.jsx component')
+  const { id } = useParams()
 
   useEffect(() => {
     dispatch(getSettings())
+    dispatch(fetchABeer(id))
   }, [])
 
   const beer = useSelector((state) => state.beer)
@@ -317,10 +319,9 @@ function Beer() {
           )
         })
       ) : (
-        <div>
-          <p>Oh no, there's no beer here!</p>
-          <p>1-325 is the range.</p>
-        </div>
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
       )}
     </div>
   )

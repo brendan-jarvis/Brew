@@ -10,6 +10,7 @@ import { getSettingsApi, editSettingsApi } from '../apis/settingsApi'
 
 export const REQUEST_BEER = 'REQUEST_BEER'
 export const RECEIVE_BEER = 'RECEIVE_BEER'
+export const RECEIVE_A_BEER = 'RECEIVE_A_BEER'
 
 export const REQUEST_SEARCH = 'REQUEST_SEARCH'
 export const RECEIVE_SEARCH = 'RECEIVE_SEARCH'
@@ -36,6 +37,13 @@ export function requestBeer() {
 export function requestSearch() {
   return {
     type: REQUEST_SEARCH,
+  }
+}
+
+export function receiveABeer(beer) {
+  return {
+    type: RECEIVE_A_BEER,
+    payload: beer,
   }
 }
 
@@ -109,6 +117,18 @@ export function delFavourites(beer) {
 export function editFavourites() {
   return {
     type: EDIT_FAVOURITES,
+  }
+}
+
+export function fetchABeer(id) {
+  return async (dispatch) => {
+    dispatch(requestBeer())
+    try {
+      const res = await request.get(`https://api.punkapi.com/v2/beers/${id}`)
+      dispatch(receiveABeer(res.body))
+    } catch (err) {
+      dispatch(showError(err.message))
+    }
   }
 }
 

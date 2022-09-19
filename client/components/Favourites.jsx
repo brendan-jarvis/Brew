@@ -44,7 +44,9 @@ function Favourites() {
                 <td>{beer.id}</td>
                 <td>{beer.brewdog_id}</td>
                 <td>
-                  <a href={`/beer/${beer.brewdog_id}`}>{beer.name}</a>
+                  <a href={`/beer/${beer.brewdog_id}`} className="link-dark">
+                    {beer.name}
+                  </a>
                 </td>
                 <td>{new Date(beer.created_at).toLocaleDateString()}</td>
                 <td>
