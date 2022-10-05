@@ -34,6 +34,7 @@
     ]
   },
   "dependencies": {
+    "@auth0/auth0-react": "^1.11.0",
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
     "@mui/icons-material": "^5.10.3",
@@ -49,7 +50,6 @@
     "knex": "^2.1.0",
     "pg": "^8.7.1",
     "react-bootstrap": "^2.5.0",
-    "sqlite3": "^5.0.8",
     "superagent": "7.1.1"
   },
   "devDependencies": {
@@ -80,7 +80,9 @@
     "react-router-dom": "^6.2.2",
     "redux": "^4.1.1",
     "redux-thunk": "^2.3.0",
+    "sqlite3": "^5.1.2",
     "supertest": "^6.2.2",
+    "webpack": "^5.74.0",
     "webpack-cli": "^4.10.0"
   },
   "prettier": {
