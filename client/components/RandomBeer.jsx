@@ -16,22 +16,11 @@ import {
 import Hash from 'hash-string'
 
 function RandomBeer() {
-  let settings = useSelector((state) => state.settings)
+  const settings = useSelector((state) => state.settings)
   const dispatch = useDispatch()
 
   useEffect(() => {
-    console.log('RandomBeer: useEffect')
-    try {
-      dispatch(getSettings())
-    } catch (e) {
-      console.log(e)
-      settings = {
-        imperial_temperature: false,
-        imperial_units: false,
-        ounces: false,
-        calories: false,
-      }
-    }
+    dispatch(getSettings())
   }, [])
 
   const randomBeer = useSelector((state) => state.randomBeer)
