@@ -2,11 +2,13 @@ import request from 'superagent'
 
 export async function getFavouritesApi() {
   const res = await request.get('/api/v1/favourites')
+  console.log('get favourites', res.body)
   return res.body
 }
 
 export async function addFavouriteApi(beer) {
   const res = await request.post('/api/v1/favourites').send(beer)
+  console.log('add favourite', res.body)
   return res.body
 }
 
