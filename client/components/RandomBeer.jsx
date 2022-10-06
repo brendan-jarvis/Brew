@@ -39,16 +39,16 @@ function RandomBeer() {
   const handleSubmit = (e) => {
     e.preventDefault()
 
+    console.log(e)
+
     dispatch(fetchRandomBeer())
   }
 
   return (
     <div className="container text-center">
-      <Form>
-        <Button variant="primary" onClick={handleSubmit}>
-          Fetch Random Recipe
-        </Button>
-      </Form>
+      <form>
+        <button onClick={handleSubmit}>Fetch Random Recipe</button>
+      </form>
       {randomBeer?.map((beer) => {
         const calories = calcCalories(
           beer.target_og / 1000,

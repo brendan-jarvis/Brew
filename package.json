@@ -6,7 +6,7 @@
   "keywords": [
     "fullstack"
   ],
-  "engines":{
+  "engines": {
     "node": "16.x"
   },
   "scripts": {
@@ -53,7 +53,13 @@
     "knex": "^2.1.0",
     "pg": "^8.7.1",
     "react-bootstrap": "^2.5.0",
-    "superagent": "7.1.1"
+    "superagent": "7.1.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-redux": "^7.2.5",
+    "react-router-dom": "^6.2.2",
+    "redux": "^4.1.1",
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.15.6",
@@ -77,12 +83,6 @@
     "jest": "^27.5.1",
     "nodemon": "^2.0.15",
     "npm-run-all": "^4.1.5",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-redux": "^7.2.5",
-    "react-router-dom": "^6.2.2",
-    "redux": "^4.1.1",
-    "redux-thunk": "^2.3.0",
     "sqlite3": "^5.1.2",
     "supertest": "^6.2.2",
     "webpack": "^5.74.0",
