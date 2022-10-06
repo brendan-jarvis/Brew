@@ -1,6 +1,7 @@
 const conn = require('./connection')
 
 function getFavourites(db = conn) {
+  console.log('getFavourites db', db)
   return db('favourites').select()
 }
 

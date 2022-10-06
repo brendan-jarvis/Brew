@@ -1,3 +1,4 @@
+import { Action } from '@remix-run/router'
 import request from 'superagent'
 import {
   getFavouritesApi,
@@ -196,8 +197,10 @@ export function getFavourites() {
     dispatch(fetchFavourites())
     try {
       const res = await getFavouritesApi()
+      console.log('action getFavourites', res)
       return dispatch(showFavourites(res))
     } catch (err) {
+      console.log('action getFavourites error', err)
       dispatch(showError(err.message))
     }
   }
@@ -206,10 +209,11 @@ export function getFavourites() {
 export function addFavourite(beer) {
   return async (dispatch) => {
     try {
-      console.log(beer)
+      console.log('action addFavourite', beer)
       await addFavouriteApi(beer)
       return dispatch(getFavourites())
     } catch (err) {
+      console.log('action addFavourite error', err)
       dispatch(showError(err.message))
     }
   }
@@ -244,8 +248,10 @@ export function getSettings() {
     dispatch(fetchSettings())
     try {
       const res = await getSettingsApi()
+      console.log('action getSettings', res)
       return dispatch(receiveSettings(res))
     } catch (err) {
+      console.log('action getSettings error', err)
       dispatch(showError(err.message))
     }
   }

@@ -2,6 +2,7 @@ import request from 'superagent'
 
 export async function getSettingsApi() {
   const res = await request.get('/api/v1/settings')
+  console.log('get settings', res)
   return res.body
 }
 

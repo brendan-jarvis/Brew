@@ -1,6 +1,7 @@
 const conn = require('./connection')
 
 function getSettings(db = conn) {
+  console.log('getSettings db', db)
   return db('settings').select().first()
 }
 
