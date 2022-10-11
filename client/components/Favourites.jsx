@@ -3,12 +3,6 @@ import { useSelector, useDispatch } from 'react-redux'
 import Hash from 'hash-string'
 import { Form, Table, Button } from 'react-bootstrap'
 
-import {
-  getFavourites,
-  deleteBeerFromFavourites,
-  editFavourite,
-} from '../actions'
-
 function Favourites() {
   const favourites = useSelector((state) => state.favourites)
   const dispatch = useDispatch()

@@ -1,10 +1,13 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import { Container, Nav, Navbar } from 'react-bootstrap'
+import { supabase } from './supabase'
 
 import ScienceIcon from '@mui/icons-material/Science'
 
 function App() {
+  const session = supabase.auth.session()
+
   return (
     <Navbar
       collapseOnSelect
@@ -35,6 +38,15 @@ function App() {
             <Nav.Link as={NavLink} to="/settings">
               Settings
             </Nav.Link>
+            {!session ? (
+              <Nav.Link as={NavLink} to="/auth">
+                Authenticate
+              </Nav.Link>
+            ) : (
+              <Nav.Link as={NavLink} to="/account">
+                Account
+              </Nav.Link>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Container>
