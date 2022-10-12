@@ -4,7 +4,7 @@ import { Button, Table, Spinner } from 'react-bootstrap'
 import { useParams } from 'react-router-dom'
 import { supabase } from './supabase'
 
-import { fetchABeer, addFavourite, getSettings } from '../actions'
+import { fetchABeer, insertFavourite, getSettings } from '../actions'
 
 import {
   SRMToRGBCSS,
@@ -33,14 +33,23 @@ function Beer() {
   const beer = useSelector((state) => state.beer)
   const [isFavourite, setIsFavourite] = useState('secondary')
 
-  const handleFavourite = (e) => {
-    const beer = { brewdog_id: beer[0].id, name: beer[0].name }
+  const handleFavourite = async (e) => {
+    try {
+      const favourite = {
+        user_id: user.id,
+        brewdog_id: beer[0].id,
+        name: beer[0].name,
+        inserted_at: new Date(),
+      }
 
-    e.target.innerHTML = 'Saved to favourites!'
+      e.target.innerHTML = 'Saved to favourites!'
 
-    setIsFavourite('success' + ' disabled')
+      setIsFavourite('success' + ' disabled')
 
-    dispatch(addFavourite(beer))
+      dispatch(insertFavourite(favourite))
+    } catch (error) {
+      console.log(error.message)
+    }
   }
 
   return (

@@ -4,7 +4,7 @@ import { Form, Table, Button } from 'react-bootstrap'
 import md5 from 'md5'
 import { supabase } from './supabase'
 
-import { getFavourites, editFavourites, deleteFavourite } from '../actions'
+import { getFavourites, updateFavourites, deleteFavourite } from '../actions'
 
 function Favourites() {
   const favourites = useSelector((state) => state.favourites)
@@ -65,7 +65,7 @@ function Favourites() {
                     checked={brewedBool}
                     onChange={() =>
                       dispatch(
-                        editFavourites(beer.id, {
+                        updateFavourites(beer.id, {
                           ...beer,
                           brewed: !beer.brewed,
                         })

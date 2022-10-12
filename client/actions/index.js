@@ -15,6 +15,7 @@ export const UPDATE_SETTINGS = 'UPDATE_SETTINGS'
 export const RECEIVE_SETTINGS = 'RECEIVE_SETTINGS'
 
 export const FETCH_FAVOURITES = 'FETCH_FAVOURITES'
+export const ADD_FAVOURITE = 'ADD_FAVOURITE'
 
 export function requestBeer() {
   return {
@@ -67,6 +68,13 @@ export function fetchFavourites(favourites) {
   return {
     type: FETCH_FAVOURITES,
     payload: favourites,
+  }
+}
+
+export function addFavourite(favourite) {
+  return {
+    type: ADD_FAVOURITE,
+    payload: favourite,
   }
 }
 
@@ -208,32 +216,25 @@ export function getFavourites(id) {
   }
 }
 
-export function addFavourite(id, favourite) {
+export function insertFavourite(favourite) {
   return async (dispatch) => {
     try {
       const { data, error } = await supabase
-
         .from('favourites')
-        .insert([
-          {
-            user_id: id,
-            ...favourite,
-          },
-        ])
-        .single()
+        .upsert(favourite)
 
       if (error) {
         throw error
       }
 
-      return dispatch(fetchFavourites(data))
+      return dispatch(addFavourite(data))
     } catch (err) {
       dispatch(showError(err.message))
     }
   }
 }
 
-export function editFavourites(id, favourites) {
+export function updateFavourites(id, favourites) {
   return async (dispatch) => {
     try {
       const updates = {

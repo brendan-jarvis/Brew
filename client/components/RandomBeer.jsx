@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Button, Form, Table } from 'react-bootstrap'
 import { supabase } from './supabase'
 
-import { fetchRandomBeer, getSettings } from '../actions'
+import { fetchRandomBeer, getSettings, insertFavourite } from '../actions'
 
 import {
   SRMToRGBCSS,
@@ -22,17 +22,17 @@ function RandomBeer() {
   const session = supabase.auth.session()
   const { user } = session
 
+  const randomBeer = useSelector((state) => state.randomBeer)
+  const [isFavourite, setIsFavourite] = useState('secondary')
+
   useEffect(() => {
     dispatch(getSettings(user.id))
   }, [])
 
-  const randomBeer = useSelector((state) => state.randomBeer)
-  const [isFavourite, setIsFavourite] = useState('secondary')
-
   const handleFavourite = async (e) => {
     try {
-      const beer = {
-        user_id: supabase.auth.user().id,
+      const favourite = {
+        user_id: user.id,
         brewdog_id: randomBeer[0].id,
         name: randomBeer[0].name,
         inserted_at: new Date(),
@@ -42,13 +42,7 @@ function RandomBeer() {
 
       setIsFavourite('success' + ' disabled')
 
-      const { error } = await supabase.from('favourites').insert(beer)
-
-      if (error) {
-        throw error
-      }
-
-      // dispatch(addFavourite(beer))
+      dispatch(insertFavourite(favourite))
     } catch (error) {
       console.log(error.message)
     }
