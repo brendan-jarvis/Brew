@@ -1,7 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Switch, FormControlLabel, Avatar } from '@mui/material'
-import { Form, Row } from 'react-bootstrap'
+import {
+  Button,
+  Container,
+  Switch,
+  FormControlLabel,
+  Typography,
+  TextField,
+  Stack,
+} from '@mui/material'
+import { Form, Image, Row } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from './supabase'
 import md5 from 'md5'
@@ -94,17 +102,33 @@ const Account = ({ session }) => {
     )
   }
 
+  const handleLogout = async () => {
+    try {
+      setLoading(true)
+      const { error } = await supabase.auth.signOut()
+      if (error) {
+        throw error
+      }
+      navigate('/')
+    } catch (error) {
+      console.log(error.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
-    <div aria-live="polite">
+    <Container>
       {loading ? (
         'Saving ...'
       ) : (
         <form onSubmit={updateProfile} className="form-widget">
-          <h1>Profile</h1>
-          <div>
-            Avatar:
-            <Avatar
-              variant="square"
+          <Typography variant="h2" align="center">
+            Profile
+          </Typography>
+          <Stack spacing={2}>
+            <Image
+              thumbnail
               src={
                 avatar_url
                   ? avatar_url
@@ -112,52 +136,96 @@ const Account = ({ session }) => {
               }
               alt={`${username} avatar`}
             />
-          </div>
-          <div>Email: {session.user.email}</div>
-          <div>
-            <label htmlFor="username">Name</label>
-            <input
+            <Typography variant="body1" gutterBottom>
+              Email: {session.user.email}
+            </Typography>
+
+            <TextField
               id="username"
               type="text"
+              label="Username"
               value={username || ''}
               onChange={(e) => setUsername(e.target.value)}
+              fullWidth
             />
-          </div>
-          <div>
-            <label htmlFor="avatar">Avatar</label>
-            <input
+            <TextField
               id="avatar"
-              type="text"
+              type="url"
+              label="Avatar URL"
               value={avatar_url || ''}
               onChange={(e) => setAvatarUrl(e.target.value)}
+              fullWidth
             />
-          </div>
-          <div>
-            <label htmlFor="website">Website</label>
-            <input
+            <TextField
               id="website"
               type="url"
+              label="Website"
               value={website || ''}
               onChange={(e) => setWebsite(e.target.value)}
+              fullWidth
             />
-          </div>
-          <div>
-            <button className="button primary block" disabled={loading}>
+            <FormControlLabel
+              className="justify-content-md-center"
+              control={
+                <Switch
+                  aria-label="Fahrenheit"
+                  checked={Boolean(settings.imperial_temperature)}
+                  name="imperial_temperature"
+                  onChange={updateSettings}
+                  color="primary"
+                />
+              }
+              label="Fahrenheit"
+            />
+            <FormControlLabel
+              className="justify-content-md-center"
+              control={
+                <Switch
+                  aria-label="Imperial Units"
+                  checked={Boolean(settings.imperial_units)}
+                  name="imperial_units"
+                  onChange={updateSettings}
+                  color="primary"
+                />
+              }
+              label="Imperial Units"
+            />
+            <FormControlLabel
+              className="justify-content-md-center"
+              control={
+                <Switch
+                  aria-label="Ounces"
+                  checked={Boolean(settings.ounces)}
+                  name="ounces"
+                  onChange={updateSettings}
+                  color="primary"
+                />
+              }
+              label="Ounces"
+            />
+            <FormControlLabel
+              className="justify-content-md-center"
+              control={
+                <Switch
+                  aria-label="Calories"
+                  checked={Boolean(settings.calories)}
+                  name="calories"
+                  onChange={updateSettings}
+                  color="primary"
+                />
+              }
+              label="Calories"
+            />
+            <Button variant="contained" disabled={loading}>
               Update profile
-            </button>
-          </div>
+            </Button>
+            <Button variant="outlined" onClick={handleLogout}>
+              Sign Out
+            </Button>
+          </Stack>
         </form>
       )}
-      <button
-        type="button"
-        className="button block"
-        onClick={() => supabase.auth.signOut()}
-      >
-        Sign Out
-      </button>
-
-      <h2>Settings</h2>
-      <Form className="mx-auto">
+      {/* <Form className="mx-auto">
         <Form.Group as={Row}>
           <FormControlLabel
             className="justify-content-md-center"
@@ -212,8 +280,8 @@ const Account = ({ session }) => {
             label="Calories"
           />
         </Form.Group>
-      </Form>
-    </div>
+      </Form> */}
+    </Container>
   )
 }
 
