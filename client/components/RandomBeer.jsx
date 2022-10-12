@@ -20,10 +20,9 @@ function RandomBeer() {
   const dispatch = useDispatch()
   const settings = useSelector((state) => state.settings)
   const session = supabase.auth.session()
+  const { user } = session
 
   useEffect(() => {
-    const { user } = session
-
     dispatch(getSettings(user.id))
   }, [])
 
@@ -59,6 +58,7 @@ function RandomBeer() {
     e.preventDefault()
 
     dispatch(fetchRandomBeer())
+    setIsFavourite('secondary')
   }
 
   return (

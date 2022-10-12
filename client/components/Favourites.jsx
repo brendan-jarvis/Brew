@@ -2,17 +2,22 @@ import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Form, Table, Button } from 'react-bootstrap'
 import md5 from 'md5'
+import { supabase } from './supabase'
+
+import { getFavourites, editFavourites, deleteFavourite } from '../actions'
 
 function Favourites() {
   const favourites = useSelector((state) => state.favourites)
   const dispatch = useDispatch()
+  const session = supabase.auth.session()
+  const { user } = session
 
   useEffect(() => {
-    // dispatch(getFavourites())
+    dispatch(getFavourites(user.id))
   }, [])
 
-  const handleClick = (id) => {
-    // dispatch(deleteBeerFromFavourites(id))
+  const handleDelete = (id) => {
+    dispatch(deleteFavourite(id, user.id))
   }
 
   return (
@@ -21,7 +26,6 @@ function Favourites() {
       <Table hover>
         <thead>
           <tr>
-            <th>ID</th>
             <th>BrewDog ID</th>
             <th>Name</th>
             <th>Added On</th>
@@ -35,14 +39,17 @@ function Favourites() {
 
             return (
               <tr key={md5(beer.id + beer.name)}>
-                <td>{beer.id}</td>
                 <td>{beer.brewdog_id}</td>
                 <td>
                   <a href={`/beer/${beer.brewdog_id}`} className="link-dark">
                     {beer.name}
                   </a>
                 </td>
-                <td>{new Date(beer.created_at).toLocaleDateString()}</td>
+                <td>
+                  {new Date(beer.inserted_at).toLocaleDateString('en-NZ', {
+                    timestyle: 'short',
+                  })}
+                </td>
                 <td>
                   {/* <label htmlFor={beer.name + 'brewed'} hidden>
                     Brewed
@@ -58,7 +65,7 @@ function Favourites() {
                     checked={brewedBool}
                     onChange={() =>
                       dispatch(
-                        editFavourite(beer.id, {
+                        editFavourites(beer.id, {
                           ...beer,
                           brewed: !beer.brewed,
                         })
@@ -71,7 +78,7 @@ function Favourites() {
                   <Button
                     variant="danger"
                     size="sm"
-                    onClick={() => handleClick(beer.id)}
+                    onClick={() => handleDelete(beer.id)}
                   >
                     Delete
                   </Button>

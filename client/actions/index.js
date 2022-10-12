@@ -14,6 +14,8 @@ export const FETCH_SETTINGS = 'FETCH_SETTINGS'
 export const UPDATE_SETTINGS = 'UPDATE_SETTINGS'
 export const RECEIVE_SETTINGS = 'RECEIVE_SETTINGS'
 
+export const FETCH_FAVOURITES = 'FETCH_FAVOURITES'
+
 export function requestBeer() {
   return {
     type: REQUEST_BEER,
@@ -58,6 +60,13 @@ export function fetchSettings(settings) {
   return {
     type: FETCH_SETTINGS,
     payload: settings,
+  }
+}
+
+export function fetchFavourites(favourites) {
+  return {
+    type: FETCH_FAVOURITES,
+    payload: favourites,
   }
 }
 
@@ -174,6 +183,88 @@ export function editSettings(id, settings) {
       }
 
       return dispatch(updateSettings(settings))
+    } catch (err) {
+      dispatch(showError(err.message))
+    }
+  }
+}
+
+export function getFavourites(id) {
+  return async (dispatch) => {
+    try {
+      const { data, error } = await supabase
+        .from('favourites')
+        .select('*')
+        .eq('user_id', id)
+
+      if (error) {
+        throw error
+      }
+
+      return dispatch(fetchFavourites(data))
+    } catch (err) {
+      dispatch(showError(err.message))
+    }
+  }
+}
+
+export function addFavourite(id, favourite) {
+  return async (dispatch) => {
+    try {
+      const { data, error } = await supabase
+
+        .from('favourites')
+        .insert([
+          {
+            user_id: id,
+            ...favourite,
+          },
+        ])
+        .single()
+
+      if (error) {
+        throw error
+      }
+
+      return dispatch(fetchFavourites(data))
+    } catch (err) {
+      dispatch(showError(err.message))
+    }
+  }
+}
+
+export function editFavourites(id, favourites) {
+  return async (dispatch) => {
+    try {
+      const updates = {
+        id: id,
+        updated_at: new Date().toISOString(),
+        ...favourites,
+      }
+
+      let { error } = await supabase.from('favourites').upsert(updates)
+
+      if (error) {
+        throw error
+      }
+
+      return dispatch(fetchFavourites(favourites))
+    } catch (err) {
+      dispatch(showError(err.message))
+    }
+  }
+}
+
+export function deleteFavourite(id, user_id) {
+  return async (dispatch) => {
+    try {
+      let { error } = await supabase.from('favourites').delete().eq('id', id)
+
+      if (error) {
+        throw error
+      }
+
+      return dispatch(getFavourites(user_id))
     } catch (err) {
       dispatch(showError(err.message))
     }
