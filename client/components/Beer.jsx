@@ -14,7 +14,7 @@ import {
   convertGToOz,
 } from './Utils'
 
-import Hash from 'hash-string'
+import md5 from 'md5'
 
 function Beer() {
   const settings = useSelector((state) => state.settings)
@@ -51,7 +51,7 @@ function Beer() {
           const kilojoules = calories * 4.18
 
           return (
-            <div key={Hash(beer)}>
+            <div key={md5(beer)}>
               <div>
                 <h1>
                   #{beer.id} {beer.name}
@@ -68,7 +68,7 @@ function Beer() {
                   <tbody>
                     <tr>
                       {beer.food_pairing.map((food) => (
-                        <td key={Hash(food)}>{food}</td>
+                        <td key={md5(food)}>{food}</td>
                       ))}
                     </tr>
                   </tbody>
@@ -191,7 +191,7 @@ function Beer() {
                   <tbody>
                     {beer.ingredients.malt.map((malt) => {
                       return (
-                        <tr key={Hash(malt.name + malt.amount.value)}>
+                        <tr key={md5(malt.name + malt.amount.value)}>
                           <th scope="col">{malt.name}</th>
                           {settings.imperial_units ? (
                             <td>
@@ -227,7 +227,7 @@ function Beer() {
                     {beer.ingredients.hops.map((hop) => {
                       return (
                         <tr
-                          key={Hash(
+                          key={md5(
                             hop.name +
                               hop.amount.value +
                               hop.add +
@@ -279,7 +279,7 @@ function Beer() {
                     {beer.method.mash_temp.map((mash) => {
                       return (
                         <tr
-                          key={Hash(
+                          key={md5(
                             mash.temp.value + mash.temp.unit + mash.duration
                           )}
                         >

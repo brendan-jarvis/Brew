@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Button, Form, Table } from 'react-bootstrap'
+import { supabase } from './supabase'
 
-import { fetchRandomBeer, addFavourite, getSettings } from '../actions'
+import { fetchRandomBeer, getSettings } from '../actions'
 
 import {
   SRMToRGBCSS,
@@ -13,11 +14,11 @@ import {
   convertGToOz,
 } from './Utils'
 
-import Hash from 'hash-string'
+import md5 from 'md5'
 
 function RandomBeer() {
-  const settings = useSelector((state) => state.settings)
   const dispatch = useDispatch()
+  const settings = useSelector((state) => state.settings)
 
   useEffect(() => {
     dispatch(getSettings())
@@ -26,14 +27,29 @@ function RandomBeer() {
   const randomBeer = useSelector((state) => state.randomBeer)
   const [isFavourite, setIsFavourite] = useState('secondary')
 
-  const handleFavourite = (e) => {
-    const beer = { brewdog_id: randomBeer[0].id, name: randomBeer[0].name }
+  const handleFavourite = async (e) => {
+    try {
+      const beer = {
+        user_id: supabase.auth.user().id,
+        brewdog_id: randomBeer[0].id,
+        name: randomBeer[0].name,
+        inserted_at: new Date(),
+      }
 
-    e.target.innerHTML = 'Saved to favourites!'
+      e.target.innerHTML = 'Saved to favourites!'
 
-    setIsFavourite('success' + ' disabled')
+      setIsFavourite('success' + ' disabled')
 
-    dispatch(addFavourite(beer))
+      const { error } = await supabase.from('favourites').insert(beer)
+
+      if (error) {
+        throw error
+      }
+
+      // dispatch(addFavourite(beer))
+    } catch (error) {
+      console.log(error.message)
+    }
   }
 
   const handleSubmit = (e) => {
@@ -57,7 +73,7 @@ function RandomBeer() {
         const kilojoules = calories * 4.18
 
         return (
-          <div key={Hash(beer)}>
+          <div key={md5(beer)}>
             <div>
               <h1>
                 #{beer.id} {beer.name}
@@ -74,7 +90,7 @@ function RandomBeer() {
                 <tbody>
                   <tr>
                     {beer.food_pairing.map((food) => (
-                      <td key={Hash(food)}>{food}</td>
+                      <td key={md5(food)}>{food}</td>
                     ))}
                   </tr>
                 </tbody>
@@ -195,7 +211,7 @@ function RandomBeer() {
                 <tbody>
                   {beer.ingredients.malt.map((malt) => {
                     return (
-                      <tr key={Hash(malt.name + malt.amount.value)}>
+                      <tr key={md5(malt.name + malt.amount.value)}>
                         <th scope="col">{malt.name}</th>
                         {settings.imperial_units ? (
                           <td>
@@ -231,7 +247,7 @@ function RandomBeer() {
                   {beer.ingredients.hops.map((hop) => {
                     return (
                       <tr
-                        key={Hash(
+                        key={md5(
                           hop.name + hop.amount.value + hop.add + hop.attribute
                         )}
                       >
@@ -280,7 +296,7 @@ function RandomBeer() {
                   {beer.method.mash_temp.map((mash) => {
                     return (
                       <tr
-                        key={Hash(
+                        key={md5(
                           mash.temp.value + mash.temp.unit + mash.duration
                         )}
                       >

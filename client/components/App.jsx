@@ -8,7 +8,6 @@ import Favourites from './Favourites'
 import SearchForm from './SearchForm'
 import ErrorMessage from './ErrorMessage'
 import RandomBeer from './RandomBeer'
-import Settings from './Settings'
 import Beer from './Beer'
 
 // Supabase components
@@ -56,7 +55,6 @@ function App() {
           <Route path="/favourites" element={<Favourites />} />
           <Route path="/search" element={<SearchForm />} />
           <Route path="/random" element={<RandomBeer />} />
-          <Route path="/settings" element={<Settings />} />
           <Route path="/beer/">
             <Route path=":id" element={<Beer />} />
           </Route>

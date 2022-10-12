@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Button, Stack, Table } from 'react-bootstrap'
 
@@ -6,7 +6,7 @@ import { SRMToRGBCSS } from './Utils'
 
 import { addFavourite } from '../actions'
 
-import Hash from 'hash-string'
+import md5 from 'md5'
 
 function RandomBeer() {
   const dispatch = useDispatch()
@@ -34,7 +34,7 @@ function RandomBeer() {
         const uniqueMalts = [...new Set(malts)]
 
         return (
-          <div key={Hash(beer.id + beer.name)}>
+          <div key={md5(beer.id + beer.name)}>
             <Stack>
               <h3 className="text-center">
                 <a href={`/beer/${beer.id}`} className="link-dark">

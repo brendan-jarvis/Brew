@@ -35,9 +35,6 @@ function App() {
             <Nav.Link as={NavLink} to="/random">
               Random
             </Nav.Link>
-            <Nav.Link as={NavLink} to="/settings">
-              Settings
-            </Nav.Link>
             {!session ? (
               <Nav.Link as={NavLink} to="/auth">
                 Authenticate

@@ -1,4 +1,6 @@
 import request from 'superagent'
+import { supabase } from '../components/supabase'
+const { user } = supabase.auth.session()
 
 export const REQUEST_BEER = 'REQUEST_BEER'
 export const RECEIVE_BEER = 'RECEIVE_BEER'
@@ -8,6 +10,10 @@ export const REQUEST_SEARCH = 'REQUEST_SEARCH'
 export const RECEIVE_SEARCH = 'RECEIVE_SEARCH'
 
 export const SHOW_ERROR = 'SHOW_ERROR'
+
+export const FETCH_SETTINGS = 'FETCH_SETTINGS'
+export const UPDATE_SETTINGS = 'UPDATE_SETTINGS'
+export const RECEIVE_SETTINGS = 'RECEIVE_SETTINGS'
 
 export function requestBeer() {
   return {
@@ -49,9 +55,17 @@ export function showError(errorMessage) {
   }
 }
 
-export function fetchFavourites() {
+export function fetchSettings(settings) {
   return {
-    type: FETCH_FAVOURITES,
+    type: FETCH_SETTINGS,
+    payload: settings,
+  }
+}
+
+export function updateSettings(settings) {
+  return {
+    type: UPDATE_SETTINGS,
+    payload: settings,
   }
 }
 
@@ -120,6 +134,47 @@ export function searchBeerRecipes(query) {
         `https://api.punkapi.com/v2/beers?${queryString.join('&')}`
       )
       dispatch(receiveSearch(res.body))
+    } catch (err) {
+      dispatch(showError(err.message))
+    }
+  }
+}
+
+export function getSettings() {
+  return async (dispatch) => {
+    try {
+      const { data, error, status } = await supabase
+        .from('profiles')
+        .select('imperial_temperature, imperial_units, ounces, calories')
+        .eq('id', user.id)
+        .single()
+
+      if (error && status !== 406) {
+        throw error
+      }
+
+      return dispatch(fetchSettings(data))
+    } catch (err) {
+      dispatch(showError(err.message))
+    }
+  }
+}
+
+export function editSettings(settings) {
+  return async (dispatch) => {
+    try {
+      const updates = {
+        id: user.id,
+        ...settings,
+      }
+
+      let { error } = await supabase.from('profiles').upsert(updates)
+
+      if (error) {
+        throw error
+      }
+
+      return dispatch(updateSettings(settings))
     } catch (err) {
       dispatch(showError(err.message))
     }

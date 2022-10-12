@@ -1,18 +1,18 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import Hash from 'hash-string'
 import { Form, Table, Button } from 'react-bootstrap'
+import md5 from 'md5'
 
 function Favourites() {
   const favourites = useSelector((state) => state.favourites)
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(getFavourites())
+    // dispatch(getFavourites())
   }, [])
 
   const handleClick = (id) => {
-    dispatch(deleteBeerFromFavourites(id))
+    // dispatch(deleteBeerFromFavourites(id))
   }
 
   return (
@@ -34,7 +34,7 @@ function Favourites() {
             const brewedBool = Boolean(beer.brewed)
 
             return (
-              <tr key={Hash(beer.id + beer.name)}>
+              <tr key={md5(beer.id + beer.name)}>
                 <td>{beer.id}</td>
                 <td>{beer.brewdog_id}</td>
                 <td>
