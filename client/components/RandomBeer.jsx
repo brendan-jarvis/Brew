@@ -19,9 +19,12 @@ import md5 from 'md5'
 function RandomBeer() {
   const dispatch = useDispatch()
   const settings = useSelector((state) => state.settings)
+  const session = supabase.auth.session()
 
   useEffect(() => {
-    dispatch(getSettings())
+    const { user } = session
+
+    dispatch(getSettings(user.id))
   }, [])
 
   const randomBeer = useSelector((state) => state.randomBeer)

@@ -24,8 +24,9 @@ const Account = ({ session }) => {
     if (!session) {
       navigate('/auth')
     }
+    const { user } = session
 
-    dispatch(getSettings())
+    dispatch(getSettings(user.id))
   }, [session])
 
   const getProfile = async () => {
@@ -83,8 +84,10 @@ const Account = ({ session }) => {
   }
 
   const updateSettings = (e) => {
+    const { user } = session
+
     dispatch(
-      editSettings({
+      editSettings(user.id, {
         ...settings,
         [e.target.name]: e.target.checked,
       })

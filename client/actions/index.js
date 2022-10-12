@@ -1,6 +1,5 @@
 import request from 'superagent'
 import { supabase } from '../components/supabase'
-const { user } = supabase.auth.session()
 
 export const REQUEST_BEER = 'REQUEST_BEER'
 export const RECEIVE_BEER = 'RECEIVE_BEER'
@@ -140,13 +139,13 @@ export function searchBeerRecipes(query) {
   }
 }
 
-export function getSettings() {
+export function getSettings(id) {
   return async (dispatch) => {
     try {
       const { data, error, status } = await supabase
         .from('profiles')
         .select('imperial_temperature, imperial_units, ounces, calories')
-        .eq('id', user.id)
+        .eq('id', id)
         .single()
 
       if (error && status !== 406) {
@@ -160,11 +159,11 @@ export function getSettings() {
   }
 }
 
-export function editSettings(settings) {
+export function editSettings(id, settings) {
   return async (dispatch) => {
     try {
       const updates = {
-        id: user.id,
+        id: id,
         ...settings,
       }
 
