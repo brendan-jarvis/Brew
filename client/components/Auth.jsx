@@ -1,35 +1,44 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { supabase } from './supabase'
-import { Alert, Button, Box, Container, TextField, Stack } from '@mui/material'
+import {
+  Alert,
+  Button,
+  Container,
+  TextField,
+  Stack,
+  Typography,
+} from '@mui/material'
+import { useNavigate } from 'react-router-dom'
 
 const Auth = () => {
   const [helperText, setHelperText] = useState({ error: null, text: null })
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const session = supabase.auth.session()
   const navigate = useNavigate()
 
-  useEffect(() => {
-    if (session) {
-      setHelperText({ error: false, text: 'You are logged in!' })
-      navigate('/')
-    }
-  }, [session])
+  const handleLogin = async (e, type) => {
+    e.preventDefault()
 
-  const handleLogin = async (type) => {
-    const { user, error } =
+    const { data, error } =
       type === 'LOGIN'
-        ? await supabase.auth.signIn({ email, password })
-        : await supabase.auth.signUp({ email, password })
+        ? await supabase.auth.signIn({
+            email,
+            password,
+          })
+        : await supabase.auth.signUp({
+            email,
+            password,
+          })
 
     if (error) {
       setHelperText({ error: true, text: error.message })
-    } else if (!user && !error) {
+    } else if (!data && !error) {
       setHelperText({
         error: false,
         text: 'An email has been sent to you for verification!',
       })
+    } else {
+      navigate('/')
     }
   }
 
@@ -41,21 +50,24 @@ const Auth = () => {
       setHelperText({ error: true, text: 'You must enter your email.' })
     } else {
       let { error } = await supabase.auth.api.resetPasswordForEmail(email)
+
+      setHelperText({
+        error: false,
+        text: 'Password recovery email has been sent.',
+      })
+
       if (error) {
         console.error('Error: ', error.message)
-      } else {
-        setHelperText({
-          error: false,
-          text: 'Password recovery email has been sent.',
-        })
       }
     }
   }
 
   return (
-    <Container>
-      <h2>Authenticate</h2>
-      <Stack>
+    <Container component="form">
+      <Typography variant="h3" align="center">
+        Authenticate with Brew!
+      </Typography>
+      <Stack spacing={2}>
         <TextField
           type="email"
           name="email"
@@ -76,7 +88,7 @@ const Auth = () => {
           required
         />
 
-        <Button variant="text" onClick={forgotPassword}>
+        <Button variant="text" color="info" onClick={forgotPassword}>
           Forgot Password?
         </Button>
         {!!helperText.text && (
@@ -87,14 +99,19 @@ const Auth = () => {
 
         <Button
           variant="contained"
-          onClick={() => handleLogin('REGISTER').catch(console.error)}
+          color="primary"
+          aria-label="register"
+          onClick={(e) => handleLogin(e, 'REGISTER').catch(console.error)}
         >
           Register
         </Button>
 
         <Button
           variant="outlined"
-          onClick={() => handleLogin('LOGIN').catch(console.error)}
+          color="primary"
+          type="submit"
+          aria-label="login"
+          onClick={(e) => handleLogin(e, 'LOGIN').catch(console.error)}
         >
           Login
         </Button>

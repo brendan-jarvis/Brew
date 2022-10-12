@@ -9,12 +9,11 @@ import {
   TextField,
   Stack,
 } from '@mui/material'
-import { Form, Image, Row } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from './supabase'
 import md5 from 'md5'
 
-import { getSettings, editSettings } from '../actions'
+import { editSettings } from '../actions'
 
 const Account = ({ session }) => {
   const [loading, setLoading] = useState(true)
@@ -28,13 +27,6 @@ const Account = ({ session }) => {
 
   useEffect(() => {
     getProfile()
-    // If session null redirect to /auth
-    if (!session) {
-      navigate('/auth')
-    }
-    const { user } = session
-
-    dispatch(getSettings(user.id))
   }, [session])
 
   const getProfile = async () => {
@@ -103,17 +95,14 @@ const Account = ({ session }) => {
   }
 
   const handleLogout = async () => {
+    navigate('/')
     try {
-      setLoading(true)
       const { error } = await supabase.auth.signOut()
       if (error) {
         throw error
       }
-      navigate('/')
     } catch (error) {
       console.log(error.message)
-    } finally {
-      setLoading(false)
     }
   }
 
@@ -127,8 +116,11 @@ const Account = ({ session }) => {
             Profile
           </Typography>
           <Stack spacing={2}>
-            <Image
-              thumbnail
+            <Container
+              component="img"
+              sx={{
+                width: '200px',
+              }}
               src={
                 avatar_url
                   ? avatar_url
@@ -136,10 +128,10 @@ const Account = ({ session }) => {
               }
               alt={`${username} avatar`}
             />
+
             <Typography variant="body1" gutterBottom>
               Email: {session.user.email}
             </Typography>
-
             <TextField
               id="username"
               type="text"
@@ -164,6 +156,8 @@ const Account = ({ session }) => {
               onChange={(e) => setWebsite(e.target.value)}
               fullWidth
             />
+          </Stack>
+          <Stack direction="row" spacing={2}>
             <FormControlLabel
               className="justify-content-md-center"
               control={
@@ -216,6 +210,8 @@ const Account = ({ session }) => {
               }
               label="Calories"
             />
+          </Stack>
+          <Stack spacing={2}>
             <Button variant="contained" disabled={loading}>
               Update profile
             </Button>
@@ -225,62 +221,6 @@ const Account = ({ session }) => {
           </Stack>
         </form>
       )}
-      {/* <Form className="mx-auto">
-        <Form.Group as={Row}>
-          <FormControlLabel
-            className="justify-content-md-center"
-            control={
-              <Switch
-                aria-label="Fahrenheit"
-                checked={Boolean(settings.imperial_temperature)}
-                name="imperial_temperature"
-                onChange={updateSettings}
-                color="primary"
-              />
-            }
-            label="Fahrenheit"
-          />
-          <FormControlLabel
-            className="justify-content-md-center"
-            control={
-              <Switch
-                aria-label="Imperial Units"
-                checked={Boolean(settings.imperial_units)}
-                name="imperial_units"
-                onChange={updateSettings}
-                color="primary"
-              />
-            }
-            label="Imperial Units"
-          />
-          <FormControlLabel
-            className="justify-content-md-center"
-            control={
-              <Switch
-                aria-label="Ounces"
-                checked={Boolean(settings.ounces)}
-                name="ounces"
-                onChange={updateSettings}
-                color="primary"
-              />
-            }
-            label="Ounces"
-          />
-          <FormControlLabel
-            className="justify-content-md-center"
-            control={
-              <Switch
-                aria-label="Calories"
-                checked={Boolean(settings.calories)}
-                name="calories"
-                onChange={updateSettings}
-                color="primary"
-              />
-            }
-            label="Calories"
-          />
-        </Form.Group>
-      </Form> */}
     </Container>
   )
 }

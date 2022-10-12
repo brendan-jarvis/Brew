@@ -14,12 +14,15 @@ import Beer from './Beer'
 import Auth from './Auth'
 import Account from './Account'
 
+import { getSettings } from '../actions'
+
 function App() {
   const [user, setUser] = useState(null)
   const session = supabase.auth.session()
 
   useEffect(() => {
     setUser(session?.user ?? null)
+    getSettings(user?.id)
 
     const { data: authListener } = supabase.auth.onAuthStateChange(
       async (event, session) => {
