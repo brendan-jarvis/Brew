@@ -216,12 +216,12 @@ export function editSettings(id, settings) {
 export function getFavourites(id) {
   return async (dispatch) => {
     try {
-      dispatch(fetchFavourites(data))
-
       const { data, error } = await supabase
         .from('favourites')
         .select('*')
         .eq('user_id', id)
+
+      dispatch(fetchFavourites(data))
 
       if (error) {
         throw error
@@ -235,11 +235,9 @@ export function getFavourites(id) {
 export function insertFavourite(favourite) {
   return async (dispatch) => {
     try {
-      dispatch(addFavourite(data))
+      dispatch(addFavourite(favourite))
 
-      const { data, error } = await supabase
-        .from('favourites')
-        .upsert(favourite)
+      const { error } = await supabase.from('favourites').upsert(favourite)
 
       if (error) {
         throw error

@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { supabase } from './supabase'
 import {
   Alert,
   Button,
+  CircularProgress,
   Container,
   TextField,
   Stack,
@@ -14,10 +15,13 @@ const Auth = () => {
   const [helperText, setHelperText] = useState({ error: null, text: null })
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
   const handleLogin = async (e, type) => {
     e.preventDefault()
+
+    setLoading(true)
 
     const { data, error } =
       type === 'LOGIN'
@@ -29,6 +33,8 @@ const Auth = () => {
             email,
             password,
           })
+
+    setLoading(false)
 
     if (error) {
       setHelperText({ error: true, text: error.message })
@@ -46,6 +52,8 @@ const Auth = () => {
     // Read more on https://supabase.com/docs/reference/javascript/reset-password-email#notes
     e.preventDefault()
 
+    setLoading(true)
+
     if (email === null || email === '') {
       setHelperText({ error: true, text: 'You must enter your email.' })
     } else {
@@ -55,6 +63,8 @@ const Auth = () => {
         error: false,
         text: 'Password recovery email has been sent.',
       })
+
+      setLoading(false)
 
       if (error) {
         console.error('Error: ', error.message)
@@ -67,7 +77,7 @@ const Auth = () => {
       <Typography variant="h3" align="center">
         Authenticate with Brew!
       </Typography>
-      <Stack spacing={2}>
+      <Stack spacing={2} alignItems="center">
         <TextField
           type="email"
           name="email"
@@ -87,34 +97,41 @@ const Auth = () => {
           fullWidth
           required
         />
-
-        <Button variant="text" color="info" onClick={forgotPassword}>
-          Forgot Password?
-        </Button>
         {!!helperText.text && (
           <Alert severity={`${helperText.error ? 'error' : 'info'}`}>
             {helperText.text}
           </Alert>
         )}
+        {loading ? (
+          <CircularProgress />
+        ) : (
+          <>
+            <Button variant="text" color="info" onClick={forgotPassword}>
+              Forgot Password?
+            </Button>
 
-        <Button
-          variant="contained"
-          color="primary"
-          aria-label="register"
-          onClick={(e) => handleLogin(e, 'REGISTER').catch(console.error)}
-        >
-          Register
-        </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              aria-label="register"
+              onClick={(e) => handleLogin(e, 'REGISTER').catch(console.error)}
+              fullWidth
+            >
+              Register
+            </Button>
 
-        <Button
-          variant="outlined"
-          color="primary"
-          type="submit"
-          aria-label="login"
-          onClick={(e) => handleLogin(e, 'LOGIN').catch(console.error)}
-        >
-          Login
-        </Button>
+            <Button
+              variant="outlined"
+              color="primary"
+              type="submit"
+              aria-label="login"
+              onClick={(e) => handleLogin(e, 'LOGIN').catch(console.error)}
+              fullWidth
+            >
+              Login
+            </Button>
+          </>
+        )}
       </Stack>
     </Container>
   )
