@@ -4,7 +4,7 @@ import { Form, Table, Button } from 'react-bootstrap'
 import md5 from 'md5'
 import { supabase } from './supabase'
 
-import { getFavourites, updateFavourites, deleteFavourite } from '../actions'
+import { getFavourites, updateFavourite, deleteFavourite } from '../actions'
 
 function Favourites() {
   const favourites = useSelector((state) => state.favourites)
@@ -17,7 +17,7 @@ function Favourites() {
   }, [])
 
   const handleDelete = (id) => {
-    dispatch(deleteFavourite(id, user.id))
+    dispatch(deleteFavourite(id))
   }
 
   return (
@@ -35,8 +35,6 @@ function Favourites() {
         </thead>
         <tbody>
           {favourites?.map((beer) => {
-            const brewedBool = Boolean(beer.brewed)
-
             return (
               <tr key={md5(beer.id + beer.name)}>
                 <td>{beer.brewdog_id}</td>
@@ -62,10 +60,10 @@ function Favourites() {
                   /> */}
                   <Form.Check
                     type="checkbox"
-                    checked={brewedBool}
+                    checked={Boolean(beer.brewed)}
                     onChange={() =>
                       dispatch(
-                        updateFavourites(beer.id, {
+                        updateFavourite(beer.id, {
                           ...beer,
                           brewed: !beer.brewed,
                         })

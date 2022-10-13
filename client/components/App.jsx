@@ -39,8 +39,8 @@ function App() {
   return (
     <>
       <div className="container">
-        <ErrorMessage />
         <Nav />
+        <ErrorMessage />
       </div>
       <div className="container">
         <Routes>

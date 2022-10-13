@@ -16,6 +16,8 @@ export const RECEIVE_SETTINGS = 'RECEIVE_SETTINGS'
 
 export const FETCH_FAVOURITES = 'FETCH_FAVOURITES'
 export const ADD_FAVOURITE = 'ADD_FAVOURITE'
+export const UPDATE_FAVOURITE = 'UPDATE_FAVOURITES'
+export const REMOVE_FAVOURITE = 'REMOVE_FAVOURITE'
 
 export function requestBeer() {
   return {
@@ -74,6 +76,20 @@ export function fetchFavourites(favourites) {
 export function addFavourite(favourite) {
   return {
     type: ADD_FAVOURITE,
+    payload: favourite,
+  }
+}
+
+export function editFavourite(updates) {
+  return {
+    type: UPDATE_FAVOURITE,
+    payload: updates,
+  }
+}
+
+export function removeFavourite(favourite) {
+  return {
+    type: REMOVE_FAVOURITE,
     payload: favourite,
   }
 }
@@ -184,13 +200,13 @@ export function editSettings(id, settings) {
         ...settings,
       }
 
+      dispatch(updateSettings(updates))
+
       let { error } = await supabase.from('profiles').upsert(updates)
 
       if (error) {
         throw error
       }
-
-      return dispatch(updateSettings(settings))
     } catch (err) {
       dispatch(showError(err.message))
     }
@@ -200,6 +216,8 @@ export function editSettings(id, settings) {
 export function getFavourites(id) {
   return async (dispatch) => {
     try {
+      dispatch(fetchFavourites(data))
+
       const { data, error } = await supabase
         .from('favourites')
         .select('*')
@@ -208,8 +226,6 @@ export function getFavourites(id) {
       if (error) {
         throw error
       }
-
-      return dispatch(fetchFavourites(data))
     } catch (err) {
       dispatch(showError(err.message))
     }
@@ -219,6 +235,8 @@ export function getFavourites(id) {
 export function insertFavourite(favourite) {
   return async (dispatch) => {
     try {
+      dispatch(addFavourite(data))
+
       const { data, error } = await supabase
         .from('favourites')
         .upsert(favourite)
@@ -226,46 +244,44 @@ export function insertFavourite(favourite) {
       if (error) {
         throw error
       }
-
-      return dispatch(addFavourite(data))
     } catch (err) {
       dispatch(showError(err.message))
     }
   }
 }
 
-export function updateFavourites(id, favourites) {
+export function updateFavourite(id, favourite) {
   return async (dispatch) => {
     try {
       const updates = {
         id: id,
         updated_at: new Date().toISOString(),
-        ...favourites,
+        ...favourite,
       }
+
+      dispatch(editFavourite(updates))
 
       let { error } = await supabase.from('favourites').upsert(updates)
 
       if (error) {
         throw error
       }
-
-      return dispatch(fetchFavourites(favourites))
     } catch (err) {
       dispatch(showError(err.message))
     }
   }
 }
 
-export function deleteFavourite(id, user_id) {
+export function deleteFavourite(id) {
   return async (dispatch) => {
     try {
+      dispatch(removeFavourite(id))
+
       let { error } = await supabase.from('favourites').delete().eq('id', id)
 
       if (error) {
         throw error
       }
-
-      return dispatch(getFavourites(user_id))
     } catch (err) {
       dispatch(showError(err.message))
     }

@@ -108,119 +108,119 @@ const Account = ({ session }) => {
 
   return (
     <Container>
-      {loading ? (
-        'Saving ...'
-      ) : (
-        <form onSubmit={updateProfile} className="form-widget">
-          <Typography variant="h2" align="center">
-            Profile
-          </Typography>
-          <Stack spacing={2}>
-            <Container
-              component="img"
-              sx={{
-                width: '200px',
-              }}
-              src={
-                avatar_url
-                  ? avatar_url
-                  : `https://www.gravatar.com/avatar/${md5(session.user.email)}`
-              }
-              alt={`${username} avatar`}
-            />
+      <form onSubmit={updateProfile} className="form-widget">
+        <Typography variant="h2" align="center">
+          Profile
+        </Typography>
+        <Stack spacing={2}>
+          <Container
+            component="img"
+            sx={{
+              width: '200px',
+            }}
+            src={
+              avatar_url
+                ? avatar_url
+                : `https://www.gravatar.com/avatar/${md5(session.user.email)}`
+            }
+            alt={`${username} avatar`}
+          />
 
-            <Typography variant="body1" gutterBottom>
-              Email: {session.user.email}
-            </Typography>
-            <TextField
-              id="username"
-              type="text"
-              label="Username"
-              value={username || ''}
-              onChange={(e) => setUsername(e.target.value)}
-              fullWidth
-            />
-            <TextField
-              id="avatar"
-              type="url"
-              label="Avatar URL"
-              value={avatar_url || ''}
-              onChange={(e) => setAvatarUrl(e.target.value)}
-              fullWidth
-            />
-            <TextField
-              id="website"
-              type="url"
-              label="Website"
-              value={website || ''}
-              onChange={(e) => setWebsite(e.target.value)}
-              fullWidth
-            />
-          </Stack>
-          <Stack direction="row" spacing={2}>
-            <FormControlLabel
-              className="justify-content-md-center"
-              control={
-                <Switch
-                  aria-label="Fahrenheit"
-                  checked={Boolean(settings.imperial_temperature)}
-                  name="imperial_temperature"
-                  onChange={updateSettings}
-                  color="primary"
-                />
-              }
-              label="Fahrenheit"
-            />
-            <FormControlLabel
-              className="justify-content-md-center"
-              control={
-                <Switch
-                  aria-label="Imperial Units"
-                  checked={Boolean(settings.imperial_units)}
-                  name="imperial_units"
-                  onChange={updateSettings}
-                  color="primary"
-                />
-              }
-              label="Imperial Units"
-            />
-            <FormControlLabel
-              className="justify-content-md-center"
-              control={
-                <Switch
-                  aria-label="Ounces"
-                  checked={Boolean(settings.ounces)}
-                  name="ounces"
-                  onChange={updateSettings}
-                  color="primary"
-                />
-              }
-              label="Ounces"
-            />
-            <FormControlLabel
-              className="justify-content-md-center"
-              control={
-                <Switch
-                  aria-label="Calories"
-                  checked={Boolean(settings.calories)}
-                  name="calories"
-                  onChange={updateSettings}
-                  color="primary"
-                />
-              }
-              label="Calories"
-            />
-          </Stack>
-          <Stack spacing={2}>
-            <Button variant="contained" disabled={loading}>
-              Update profile
-            </Button>
-            <Button variant="outlined" onClick={handleLogout}>
-              Sign Out
-            </Button>
-          </Stack>
-        </form>
-      )}
+          <Typography variant="body1" gutterBottom>
+            Email: {session.user.email}
+          </Typography>
+          <TextField
+            id="username"
+            type="text"
+            label="Username"
+            value={username || ''}
+            onChange={(e) => setUsername(e.target.value)}
+            fullWidth
+          />
+          <TextField
+            id="avatar"
+            type="url"
+            label="Avatar URL"
+            value={avatar_url || ''}
+            onChange={(e) => setAvatarUrl(e.target.value)}
+            fullWidth
+          />
+          <TextField
+            id="website"
+            type="url"
+            label="Website"
+            value={website || ''}
+            onChange={(e) => setWebsite(e.target.value)}
+            fullWidth
+          />
+        </Stack>
+        <Stack direction="row" spacing={2}>
+          <FormControlLabel
+            className="justify-content-md-center"
+            control={
+              <Switch
+                aria-label="Fahrenheit"
+                checked={Boolean(settings.imperial_temperature)}
+                name="imperial_temperature"
+                onChange={updateSettings}
+                color="primary"
+              />
+            }
+            label="Fahrenheit"
+          />
+          <FormControlLabel
+            className="justify-content-md-center"
+            control={
+              <Switch
+                aria-label="Imperial Units"
+                checked={Boolean(settings.imperial_units)}
+                name="imperial_units"
+                onChange={updateSettings}
+                color="primary"
+              />
+            }
+            label="Imperial Units"
+          />
+          <FormControlLabel
+            className="justify-content-md-center"
+            control={
+              <Switch
+                aria-label="Ounces"
+                checked={Boolean(settings.ounces)}
+                name="ounces"
+                onChange={updateSettings}
+                color="primary"
+              />
+            }
+            label="Ounces"
+          />
+          <FormControlLabel
+            className="justify-content-md-center"
+            control={
+              <Switch
+                aria-label="Calories"
+                checked={Boolean(settings.calories)}
+                name="calories"
+                onChange={updateSettings}
+                color="primary"
+              />
+            }
+            label="Calories"
+          />
+        </Stack>
+        <Stack spacing={2}>
+          <Button
+            variant="contained"
+            onClick={updateProfile}
+            disabled={loading}
+          >
+            {loading ? 'Saving changes ...' : 'Update profile'}
+          </Button>
+          <Button variant="outlined" onClick={handleLogout}>
+            Sign Out
+          </Button>
+        </Stack>
+      </form>
     </Container>
   )
 }

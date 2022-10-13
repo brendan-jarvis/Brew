@@ -7,7 +7,7 @@ function settings(state = [], action) {
     case FETCH_SETTINGS:
       return payload
     case UPDATE_SETTINGS:
-      return payload
+      return { ...state, ...payload }
     default:
       return state
   }
