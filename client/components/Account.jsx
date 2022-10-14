@@ -122,13 +122,13 @@ const Account = ({ session }) => {
             src={
               avatar_url
                 ? avatar_url
-                : `https://www.gravatar.com/avatar/${md5(session.user.email)}`
+                : `https://www.gravatar.com/avatar/${md5(user.email)}`
             }
             alt={`${username} avatar`}
           />
 
           <Typography variant="body1" gutterBottom>
-            Email: {session.user.email}
+            Email: {user.email}
           </Typography>
           <TextField
             id="username"
