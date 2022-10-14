@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
 import { NavLink } from 'react-router-dom'
-import { supabase } from './supabase'
 import md5 from 'md5'
 
 import {
@@ -19,12 +19,12 @@ import {
 import ScienceIcon from '@mui/icons-material/Science'
 import IconButton from '@mui/material/IconButton'
 import MenuIcon from '@mui/icons-material/Menu'
+import LoginIcon from '@mui/icons-material/Login'
 
 const pages = ['Favourites', 'Search', 'Random']
 
 function Nav() {
-  const session = supabase.auth.session()
-  const { user } = session
+  const session = useSelector((state) => state.session)
 
   const [anchorElNav, setAnchorElNav] = useState(null)
 
@@ -136,18 +136,33 @@ function Nav() {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Edit profile">
-              <IconButton as={NavLink} to="/account" sx={{ p: 0 }}>
-                <Avatar
-                  src={
-                    user.avatar_url
-                      ? user.avatar_url
-                      : `https://www.gravatar.com/avatar/${md5(user.email)}`
-                  }
-                  alt={`${user.username} avatar`}
-                />
-              </IconButton>
-            </Tooltip>
+            {session?.user ? (
+              <Tooltip title="Edit profile">
+                <IconButton as={NavLink} to="/account" sx={{ p: 0 }}>
+                  <Avatar
+                    src={
+                      session?.user.avatar_url
+                        ? session?.user.avatar_url
+                        : `https://www.gravatar.com/avatar/${md5(
+                            session?.user.email
+                          )}`
+                    }
+                    alt={`${session?.user.username} avatar`}
+                  />
+                </IconButton>
+              </Tooltip>
+            ) : (
+              <Tooltip title="Login">
+                <IconButton
+                  as={NavLink}
+                  to="/auth"
+                  color="inherit"
+                  sx={{ p: 0 }}
+                >
+                  <LoginIcon />
+                </IconButton>
+              </Tooltip>
+            )}
           </Box>
         </Toolbar>
       </Container>
