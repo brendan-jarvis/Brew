@@ -177,7 +177,9 @@ export function getSettings(id) {
     try {
       const { data, error, status } = await supabase
         .from('profiles')
-        .select('imperial_temperature, imperial_units, ounces, calories')
+        .select(
+          'imperial_temperature, imperial_units, ounces, calories, dark_mode'
+        )
         .eq('id', id)
         .single()
 

@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react'
 import { supabase } from './supabase'
 import { Routes, Route } from 'react-router-dom'
 
+import { ThemeProvider } from '@mui/material/styles'
+import { darkTheme, lightTheme } from '../styles/themes'
+
 import Nav from './Nav'
 import Home from './Home'
 import Favourites from './Favourites'
@@ -15,10 +18,12 @@ import Auth from './Auth'
 import Account from './Account'
 
 import { getSettings } from '../actions'
+import { useSelector } from 'react-redux'
 
 function App() {
   const [user, setUser] = useState(null)
   const session = supabase.auth.session()
+  const settings = useSelector((state) => state.settings)
 
   useEffect(() => {
     setUser(session?.user ?? null)
@@ -37,7 +42,7 @@ function App() {
   }, [user])
 
   return (
-    <>
+    <ThemeProvider theme={settings.dark_mode ? darkTheme : lightTheme}>
       <div className="container">
         <Nav />
         <ErrorMessage />
@@ -63,7 +68,7 @@ function App() {
           </Route>
         </Routes>
       </div>
-    </>
+    </ThemeProvider>
   )
 }
 

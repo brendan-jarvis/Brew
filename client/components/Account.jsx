@@ -13,7 +13,7 @@ import { useNavigate } from 'react-router-dom'
 import { supabase } from './supabase'
 import md5 from 'md5'
 
-import { editSettings } from '../actions'
+import { getSettings, editSettings } from '../actions'
 
 const Account = ({ session }) => {
   const [loading, setLoading] = useState(true)
@@ -22,17 +22,19 @@ const Account = ({ session }) => {
   const [avatar_url, setAvatarUrl] = useState(null)
   const settings = useSelector((state) => state.settings)
   const dispatch = useDispatch()
+  const { user } = session
 
   const navigate = useNavigate()
 
   useEffect(() => {
     getProfile()
+
+    getSettings(user.id)
   }, [session])
 
   const getProfile = async () => {
     try {
       setLoading(true)
-      const { user } = session
 
       let { data, error, status } = await supabase
         .from('profiles')
@@ -61,7 +63,6 @@ const Account = ({ session }) => {
 
     try {
       setLoading(true)
-      const { user } = session
 
       const updates = {
         id: user.id,
@@ -155,6 +156,19 @@ const Account = ({ session }) => {
           />
         </Stack>
         <Stack direction="row" spacing={2}>
+          <FormControlLabel
+            className="justify-content-md-center"
+            control={
+              <Switch
+                aria-label="Dark Mode"
+                checked={Boolean(settings.dark_mode)}
+                name="dark_mode"
+                onChange={updateSettings}
+                color="primary"
+              />
+            }
+            label="Dark Mode"
+          />
           <FormControlLabel
             className="justify-content-md-center"
             control={
