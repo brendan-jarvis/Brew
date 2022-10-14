@@ -1,6 +1,15 @@
 import { createTheme } from '@mui/material/styles'
 
+const baseTheme = createTheme({
+  typography: {
+    fontFamily: 'Roboto, sans-serif',
+    fontSize: 14,
+    fontSecondary: 'Raleway, sans-serif',
+  },
+})
+
 export const lightTheme = createTheme({
+  ...baseTheme,
   palette: {
     type: 'light',
     primary: {
