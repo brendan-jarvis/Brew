@@ -1,8 +1,22 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Form, Table, Button } from 'react-bootstrap'
+import { NavLink } from 'react-router-dom'
 import { supabase } from '../utils/supabase'
 import md5 from 'md5'
+import {
+  Button,
+  Checkbox,
+  Container,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+  Paper,
+} from '@mui/material'
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 
 import { getFavourites, updateFavourite, deleteFavourite } from '../actions'
 
@@ -21,44 +35,43 @@ function Favourites() {
   }
 
   return (
-    <div className="container">
+    <Container>
       <h1>Favourites</h1>
-      <Table hover>
-        <thead>
-          <tr>
-            <th>BrewDog ID</th>
-            <th>Name</th>
-            <th>Added On</th>
-            <th>Brewed</th>
-            <th>Remove</th>
-          </tr>
-        </thead>
-        <tbody>
-          {favourites?.map((beer) => {
-            return (
-              <tr key={md5(beer.id + beer.name)}>
-                <td>{beer.brewdog_id}</td>
-                <td>
-                  <a href={`/beer/${beer.brewdog_id}`} className="link-dark">
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Name</TableCell>
+              <TableCell>BrewDog ID</TableCell>
+              <TableCell>Added On</TableCell>
+              <TableCell>Brewed</TableCell>
+              <TableCell>Remove</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {favourites.map((beer) => (
+              <TableRow
+                key={md5(beer.id + beer.name)}
+                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  <Typography
+                    variant="body1"
+                    color="text.primary"
+                    component={NavLink}
+                    to={`/beer/${beer.brewdog_id}`}
+                  >
                     {beer.name}
-                  </a>
-                </td>
-                <td>
+                  </Typography>
+                </TableCell>
+                <TableCell>{beer.brewdog_id}</TableCell>
+                <TableCell>
                   {new Date(beer.inserted_at).toLocaleDateString('en-NZ', {
                     timestyle: 'short',
                   })}
-                </td>
-                <td>
-                  {/* <label htmlFor={beer.name + 'brewed'} hidden>
-                    Brewed
-                  </label>
-                  <input
-                    type="checkbox"
-                    name={beer.name + 'brewed'}
-                    id={beer.id}
-                    checked={Boolean(beer.brewed)}
-                  /> */}
-                  <Form.Check
+                </TableCell>
+                <TableCell>
+                  <Checkbox
                     type="checkbox"
                     checked={Boolean(beer.brewed)}
                     onChange={() =>
@@ -71,22 +84,24 @@ function Favourites() {
                     }
                     aria-label={`Brewed ${beer.name}`}
                   />
-                </td>
-                <td>
+                </TableCell>
+                <TableCell>
                   <Button
-                    variant="danger"
-                    size="sm"
+                    variant="contained"
+                    color="error"
+                    size="small"
                     onClick={() => handleDelete(beer.id)}
+                    endIcon={<DeleteForeverIcon />}
                   >
                     Delete
                   </Button>
-                </td>
-              </tr>
-            )
-          })}
-        </tbody>
-      </Table>
-    </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Container>
   )
 }
 
