@@ -1,4 +1,4 @@
-import * as Utils from './Utils'
+import * as Utils from '../../utils/Utils'
 
 describe('Colour conversion functions', () => {
   test('Convert SRM to EBC returns a correct result', () => {

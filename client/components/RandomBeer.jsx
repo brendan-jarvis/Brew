@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Button, Form, Table } from 'react-bootstrap'
-import { supabase } from './supabase'
+import { supabase } from '../utils/supabase'
 
 import { fetchRandomBeer, getSettings, insertFavourite } from '../actions'
 
@@ -12,7 +12,7 @@ import {
   convertLitresToGallons,
   convertKilogramsToPounds,
   convertGToOz,
-} from './Utils'
+} from '../utils/Utils'
 
 import md5 from 'md5'
 

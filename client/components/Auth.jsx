@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { supabase } from './supabase'
+import { supabase } from '../utils/supabase'
 import {
   Alert,
   Button,
@@ -56,6 +56,7 @@ const Auth = () => {
 
     if (email === null || email === '') {
       setHelperText({ error: true, text: 'You must enter your email.' })
+      setLoading(false)
     } else {
       let { error } = await supabase.auth.api.resetPasswordForEmail(email)
 

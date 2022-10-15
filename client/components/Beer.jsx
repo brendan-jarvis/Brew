@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Button, Table, Spinner } from 'react-bootstrap'
 import { useParams } from 'react-router-dom'
-import { supabase } from './supabase'
 
 import { fetchABeer, insertFavourite, getSettings } from '../actions'
 
@@ -13,14 +12,14 @@ import {
   convertLitresToGallons,
   convertKilogramsToPounds,
   convertGToOz,
-} from './Utils'
+} from '../utils/Utils'
 
 import md5 from 'md5'
 
 function Beer() {
   const settings = useSelector((state) => state.settings)
+  const session = useSelector((state) => state.session)
   const dispatch = useDispatch()
-  const session = supabase.auth.session()
 
   const { id } = useParams()
   const { user } = session

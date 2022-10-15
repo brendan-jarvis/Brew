@@ -10,7 +10,7 @@ import {
   Stack,
 } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
-import { supabase } from './supabase'
+import { supabase } from '../utils/supabase'
 import md5 from 'md5'
 
 import { getSettings, editSettings } from '../actions'
@@ -29,7 +29,7 @@ const Account = ({ session }) => {
   useEffect(() => {
     getProfile()
 
-    getSettings(user.id)
+    dispatch(getSettings(user.id))
   }, [session])
 
   const getProfile = async () => {

@@ -1,5 +1,5 @@
 import request from 'superagent'
-import { supabase } from '../components/supabase'
+import { supabase } from '../utils/supabase'
 
 export const REQUEST_BEER = 'REQUEST_BEER'
 export const RECEIVE_BEER = 'RECEIVE_BEER'
@@ -10,12 +10,12 @@ export const RECEIVE_SEARCH = 'RECEIVE_SEARCH'
 
 export const SHOW_ERROR = 'SHOW_ERROR'
 
-export const SET_USER = 'SET_USER'
-export const LOGOUT_USER = 'LOGOUT_USER'
+export const SET_SESSION = 'SET_SESSION'
+export const CLEAR_SESSION = 'CLEAR_SESSION'
 
 export const FETCH_SETTINGS = 'FETCH_SETTINGS'
 export const UPDATE_SETTINGS = 'UPDATE_SETTINGS'
-export const RECEIVE_SETTINGS = 'RECEIVE_SETTINGS'
+export const CLEAR_SETTINGS = 'CLEAR_SETTINGS'
 
 export const FETCH_FAVOURITES = 'FETCH_FAVOURITES'
 export const ADD_FAVOURITE = 'ADD_FAVOURITE'
@@ -218,6 +218,12 @@ export function editSettings(id, settings) {
   }
 }
 
+export function clearSettings() {
+  return {
+    type: CLEAR_SETTINGS,
+  }
+}
+
 export function getFavourites(id) {
   return async (dispatch) => {
     try {
@@ -291,23 +297,21 @@ export function deleteFavourite(id) {
   }
 }
 
-export function setUser(user) {
+export function setSession(session) {
   return {
-    type: SET_USER,
-    payload: user,
+    type: SET_SESSION,
+    payload: session,
   }
 }
 
-export function logoutUser() {
+export function clearSession() {
   return {
-    type: LOGOUT_USER,
+    type: CLEAR_SESSION,
   }
 }
 
-export function storeUser(user) {
+export function storeSession(session) {
   return async (dispatch) => {
-    if (user) {
-      dispatch(setUser(user))
-    }
+    dispatch(setSession(session))
   }
 }

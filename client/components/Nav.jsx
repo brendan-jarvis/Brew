@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
 import { NavLink } from 'react-router-dom'
+import { supabase } from '../utils/supabase'
 import md5 from 'md5'
 
 import {
@@ -24,7 +24,7 @@ import LoginIcon from '@mui/icons-material/Login'
 const pages = ['Favourites', 'Search', 'Random']
 
 function Nav() {
-  const session = useSelector((state) => state.session)
+  const session = supabase.auth.session()
 
   const [anchorElNav, setAnchorElNav] = useState(null)
 
@@ -126,6 +126,7 @@ function Nav() {
               <Button
                 key={page}
                 as={NavLink}
+                color="inherit"
                 to={page.toLowerCase()}
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { supabase } from './supabase'
+import { supabase } from '../utils/supabase'
 import { Routes, Route } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
 
 import { ThemeProvider } from '@mui/material/styles'
 import { darkTheme, lightTheme } from '../styles/themes'
@@ -17,22 +18,46 @@ import Beer from './Beer'
 import Auth from './Auth'
 import Account from './Account'
 
-import { storeUser, getSettings } from '../actions'
-import { useSelector } from 'react-redux'
+import {
+  storeSession,
+  clearSession,
+  getSettings,
+  clearSettings,
+} from '../actions'
 
 function App() {
-  const session = supabase.auth.session()
+  const [user, setUser] = useState(null)
   const settings = useSelector((state) => state.settings)
-  const user = useSelector((state) => state.user)
+  const session = supabase.auth.session()
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    storeUser(session?.user)
-    getSettings(user?.id)
+    setUser(session?.user ?? null)
 
     const { data: authListener } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         const currentUser = session?.user
-        storeUser(currentUser ?? null)
+        setUser(currentUser ?? null)
+
+        if (event == 'SIGNED_IN' || event == 'USER_UPDATED') {
+          dispatch(getSettings(currentUser.id))
+          dispatch(storeSession(session))
+        }
+        if (event == 'SIGNED_OUT') {
+          dispatch(clearSession())
+          dispatch(clearSettings())
+        }
+        if (event == 'PASSWORD_RECOVERY') {
+          const newPassword = prompt(
+            'What would you like your new password to be?'
+          )
+          const { data, error } = await supabase.auth.updateUser({
+            password: newPassword,
+          })
+
+          if (data) alert('Password updated successfully!')
+          if (error) alert('There was an error updating your password.')
+        }
       }
     )
 

@@ -2,7 +2,7 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Button, Stack, Table } from 'react-bootstrap'
 
-import { SRMToRGBCSS } from './Utils'
+import { SRMToRGBCSS } from '../utils/Utils'
 
 import { addFavourite } from '../actions'
 

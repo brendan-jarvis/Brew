@@ -22,7 +22,7 @@ function SearchForm() {
     hops: '',
     malt: '',
     yeast: '',
-    search: '',
+    name: '',
   })
 
   const abvMarks = [
@@ -128,7 +128,6 @@ function SearchForm() {
   }
 
   const handleChangeAbv = (event, newValue) => {
-    // setAbv(newValue)
     setQuery({ ...query, abv: newValue })
   }
 
@@ -192,7 +191,7 @@ function SearchForm() {
             type="text"
             name="name"
             id="name"
-            value={query.search}
+            value={query.name}
             onChange={handleChange}
           />
           <Form.Label htmlFor="malt">Malt:</Form.Label>

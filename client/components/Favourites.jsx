@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Form, Table, Button } from 'react-bootstrap'
+import { supabase } from '../utils/supabase'
 import md5 from 'md5'
-import { supabase } from './supabase'
 
 import { getFavourites, updateFavourite, deleteFavourite } from '../actions'
 
 function Favourites() {
   const favourites = useSelector((state) => state.favourites)
-  const dispatch = useDispatch()
   const session = supabase.auth.session()
+  const dispatch = useDispatch()
   const { user } = session
 
   useEffect(() => {
