@@ -17,22 +17,22 @@ import Beer from './Beer'
 import Auth from './Auth'
 import Account from './Account'
 
-import { getSettings } from '../actions'
+import { storeUser, getSettings } from '../actions'
 import { useSelector } from 'react-redux'
 
 function App() {
-  const [user, setUser] = useState(null)
   const session = supabase.auth.session()
   const settings = useSelector((state) => state.settings)
+  const user = useSelector((state) => state.user)
 
   useEffect(() => {
-    setUser(session?.user ?? null)
+    storeUser(session?.user)
     getSettings(user?.id)
 
     const { data: authListener } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         const currentUser = session?.user
-        setUser(currentUser ?? null)
+        storeUser(currentUser ?? null)
       }
     )
 

@@ -10,6 +10,9 @@ export const RECEIVE_SEARCH = 'RECEIVE_SEARCH'
 
 export const SHOW_ERROR = 'SHOW_ERROR'
 
+export const SET_USER = 'SET_USER'
+export const LOGOUT_USER = 'LOGOUT_USER'
+
 export const FETCH_SETTINGS = 'FETCH_SETTINGS'
 export const UPDATE_SETTINGS = 'UPDATE_SETTINGS'
 export const RECEIVE_SETTINGS = 'RECEIVE_SETTINGS'
@@ -284,6 +287,27 @@ export function deleteFavourite(id) {
       }
     } catch (err) {
       dispatch(showError(err.message))
+    }
+  }
+}
+
+export function setUser(user) {
+  return {
+    type: SET_USER,
+    payload: user,
+  }
+}
+
+export function logoutUser() {
+  return {
+    type: LOGOUT_USER,
+  }
+}
+
+export function storeUser(user) {
+  return async (dispatch) => {
+    if (user) {
+      dispatch(setUser(user))
     }
   }
 }

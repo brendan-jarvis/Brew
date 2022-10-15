@@ -1,48 +1,37 @@
 import React from 'react'
-
-import { Carousel, Container } from 'react-bootstrap/'
+import { Box, ImageList, ImageListItem } from '@mui/material'
 
 function Home() {
+  const itemData = [
+    {
+      img: '/lutz-wernitz-pcW5bR7gSJ4-unsplash.jpg',
+      title: 'Light malt grains',
+    },
+    {
+      img: '/markus-spiske-qn5iDwvOZgo-unsplash.jpg',
+      title: 'Hop flowers',
+    },
+    {
+      img: '/adam-wilson-I2f5BbeXPVY-unsplash.jpg',
+      title: 'Bottled homebrew beers',
+    },
+  ]
+
   return (
-    <Container fluid>
-      <Carousel fade>
-        <Carousel.Item>
-          <img
-            className="d-block w-100"
-            src="/lutz-wernitz-pcW5bR7gSJ4-unsplash.jpg"
-            alt="Light malt grains"
-          />
-          <Carousel.Caption>
-            <h3>Malt</h3>
-            <p>Fementables.</p>
-          </Carousel.Caption>
-        </Carousel.Item>
-        <Carousel.Item>
-          <img
-            className="d-block w-100"
-            src="markus-spiske-qn5iDwvOZgo-unsplash.jpg"
-            alt="Hop flowers"
-          />
-
-          <Carousel.Caption>
-            <h3>Hops</h3>
-            <p>Flavour/Bittering.</p>
-          </Carousel.Caption>
-        </Carousel.Item>
-        <Carousel.Item>
-          <img
-            className="d-block w-100"
-            src="/adam-wilson-I2f5BbeXPVY-unsplash.jpg"
-            alt="Bottled homebrew beers"
-          />
-
-          <Carousel.Caption>
-            <h3>Beer</h3>
-            <p>Brew!</p>
-          </Carousel.Caption>
-        </Carousel.Item>
-      </Carousel>
-    </Container>
+    <Box sx={{ width: 500, height: 450, overflowY: 'scroll' }}>
+      <ImageList variant="masonry" cols={3} gap={8}>
+        {itemData.map((item) => (
+          <ImageListItem key={item.img}>
+            <img
+              src={`${item.img}?w=248&fit=crop&auto=format`}
+              srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
+              alt={item.title}
+              loading="lazy"
+            />
+          </ImageListItem>
+        ))}
+      </ImageList>
+    </Box>
   )
 }
 

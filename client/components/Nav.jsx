@@ -136,7 +136,7 @@ function Nav() {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Edit profile">
+            <Tooltip title="View profile">
               <IconButton as={NavLink} to="/account" sx={{ p: 0 }}>
                 <Avatar
                   src={

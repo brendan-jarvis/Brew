@@ -155,7 +155,10 @@ const Account = ({ session }) => {
             fullWidth
           />
         </Stack>
-        <Stack direction="row" spacing={2}>
+        <Stack
+          direction={{ sm: 'column', md: 'row' }}
+          spacing={{ xs: 1, sm: 2 }}
+        >
           <FormControlLabel
             className="justify-content-md-center"
             control={
