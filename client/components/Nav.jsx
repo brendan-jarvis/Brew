@@ -17,11 +17,23 @@ import {
   List,
   ListItem,
   ListItemText,
+  ListItemIcon,
 } from '@mui/material'
 
-import { Science, Menu as MenuIcon, Login } from '@mui/icons-material'
+import {
+  Science,
+  Menu as MenuIcon,
+  Login,
+  Favorite,
+  Search,
+  Shuffle,
+} from '@mui/icons-material'
 
-const pages = ['Favourites', 'Search', 'Random']
+const pages = [
+  { text: 'Favourites', icon: Favorite },
+  { text: 'Search', icon: Search },
+  { text: 'Random', icon: Shuffle },
+]
 
 function Nav() {
   const session = supabase.auth.session()
@@ -72,12 +84,15 @@ function Nav() {
               <List>
                 {pages.map((page) => (
                   <ListItem
-                    key={page}
+                    key={page.text}
                     as={NavLink}
-                    to={page.toLowerCase()}
+                    to={page.text.toLowerCase()}
                     onClick={() => setOpen(false)}
                   >
-                    <ListItemText primary={page} />
+                    <ListItemIcon>
+                      {React.createElement(page.icon)}
+                    </ListItemIcon>
+                    <ListItemText primary={page.text} />
                   </ListItem>
                 ))}
               </List>
@@ -106,13 +121,13 @@ function Nav() {
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
               <Button
-                key={page}
+                key={page.text}
                 as={NavLink}
                 color="inherit"
-                to={page.toLowerCase()}
+                to={page.text.toLowerCase()}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                {page}
+                {page.text}
               </Button>
             ))}
           </Box>
