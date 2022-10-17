@@ -16,7 +16,8 @@ import {
   Typography,
   Paper,
 } from '@mui/material'
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
+
+import { DeleteForever, Launch } from '@mui/icons-material'
 
 import { getFavourites, updateFavourite, deleteFavourite } from '../actions'
 
@@ -62,6 +63,7 @@ function Favourites() {
                     to={`/beer/${beer.brewdog_id}`}
                   >
                     {beer.name}
+                    <Launch color="inherit" fontSize="inherit" />
                   </Typography>
                 </TableCell>
                 <TableCell>{beer.brewdog_id}</TableCell>
@@ -91,7 +93,7 @@ function Favourites() {
                     color="error"
                     size="small"
                     onClick={() => handleDelete(beer.id)}
-                    endIcon={<DeleteForeverIcon />}
+                    endIcon={<DeleteForever />}
                   >
                     Delete
                   </Button>

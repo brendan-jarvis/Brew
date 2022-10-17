@@ -8,39 +8,31 @@ import {
   Box,
   Toolbar,
   Typography,
-  Menu,
+  SwipeableDrawer,
+  IconButton,
   Container,
   Avatar,
   Button,
   Tooltip,
-  MenuItem,
+  List,
+  ListItem,
+  ListItemText,
 } from '@mui/material'
 
-import ScienceIcon from '@mui/icons-material/Science'
-import IconButton from '@mui/material/IconButton'
-import MenuIcon from '@mui/icons-material/Menu'
-import LoginIcon from '@mui/icons-material/Login'
+import { Science, Menu as MenuIcon, Login } from '@mui/icons-material'
 
 const pages = ['Favourites', 'Search', 'Random']
 
 function Nav() {
   const session = supabase.auth.session()
 
-  const [anchorElNav, setAnchorElNav] = useState(null)
-
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget)
-  }
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null)
-  }
+  const [open, setOpen] = useState(false)
 
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <ScienceIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          <Science sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
           <Typography
             variant="h6"
             noWrap
@@ -63,45 +55,35 @@ function Nav() {
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
-              aria-label="account of current user"
+              aria-label="Toggle navigation menu"
               aria-controls="menu-appbar"
               aria-haspopup="true"
-              onClick={handleOpenNavMenu}
+              onClick={() => setOpen(!open)}
               color="inherit"
             >
               <MenuIcon />
             </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: 'block', md: 'none' },
-              }}
+            <SwipeableDrawer
+              anchor="left"
+              open={open}
+              onClose={() => setOpen(false)}
+              onOpen={() => setOpen(true)}
             >
-              {pages.map((page) => (
-                <MenuItem
-                  key={page}
-                  as={NavLink}
-                  to={page.toLowerCase()}
-                  onClick={handleCloseNavMenu}
-                >
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
+              <List>
+                {pages.map((page) => (
+                  <ListItem
+                    key={page}
+                    as={NavLink}
+                    to={page.toLowerCase()}
+                    onClick={() => setOpen(false)}
+                  >
+                    <ListItemText primary={page} />
+                  </ListItem>
+                ))}
+              </List>
+            </SwipeableDrawer>
           </Box>
-          <ScienceIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+          <Science sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
           <Typography
             variant="h5"
             noWrap
@@ -128,7 +110,6 @@ function Nav() {
                 as={NavLink}
                 color="inherit"
                 to={page.toLowerCase()}
-                onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
                 {page}
@@ -160,7 +141,7 @@ function Nav() {
                   color="inherit"
                   sx={{ p: 0 }}
                 >
-                  <LoginIcon />
+                  <Login />
                 </IconButton>
               </Tooltip>
             )}
