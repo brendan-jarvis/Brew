@@ -48,8 +48,7 @@ function Nav() {
           <Typography
             variant="h6"
             noWrap
-            component="a"
-            as={NavLink}
+            component={NavLink}
             to="/"
             sx={{
               mr: 2,
@@ -85,7 +84,7 @@ function Nav() {
                 {pages.map((page) => (
                   <ListItem
                     key={page.text}
-                    as={NavLink}
+                    component={NavLink}
                     to={page.text.toLowerCase()}
                     onClick={() => setOpen(false)}
                   >
@@ -102,8 +101,7 @@ function Nav() {
           <Typography
             variant="h5"
             noWrap
-            component="a"
-            as={NavLink}
+            component={NavLink}
             to="/"
             sx={{
               mr: 2,
@@ -122,7 +120,7 @@ function Nav() {
             {pages.map((page) => (
               <Button
                 key={page.text}
-                as={NavLink}
+                component={NavLink}
                 color="inherit"
                 to={page.text.toLowerCase()}
                 sx={{ my: 2, color: 'white', display: 'block' }}
@@ -135,7 +133,7 @@ function Nav() {
           <Box sx={{ flexGrow: 0 }}>
             {session?.user ? (
               <Tooltip title="Edit profile">
-                <IconButton as={NavLink} to="/account" sx={{ p: 0 }}>
+                <IconButton component={NavLink} to="/account" sx={{ p: 0 }}>
                   <Avatar
                     src={
                       session?.user.avatar_url
@@ -151,7 +149,7 @@ function Nav() {
             ) : (
               <Tooltip title="Login">
                 <IconButton
-                  as={NavLink}
+                  component={NavLink}
                   to="/auth"
                   color="inherit"
                   sx={{ p: 0 }}
