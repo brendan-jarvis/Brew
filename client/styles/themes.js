@@ -1,4 +1,4 @@
-import { createTheme } from '@mui/material/styles'
+import { createTheme, responsiveFontSizes } from '@mui/material/styles'
 
 const baseTheme = createTheme({
   typography: {
@@ -8,35 +8,39 @@ const baseTheme = createTheme({
   },
 })
 
-export const lightTheme = createTheme({
-  ...baseTheme,
-  palette: {
-    type: 'light',
-    primary: {
-      main: '#1976d2',
+export const lightTheme = responsiveFontSizes(
+  createTheme({
+    ...baseTheme,
+    palette: {
+      type: 'light',
+      primary: {
+        main: '#1976d2',
+      },
+      secondary: {
+        main: 'rgb(220, 0, 78)',
+      },
+      background: {
+        default: '#fff',
+        paper: '#fff',
+      },
     },
-    secondary: {
-      main: 'rgb(220, 0, 78)',
-    },
-    background: {
-      default: '#fff',
-      paper: '#fff',
-    },
-  },
-})
+  })
+)
 
-export const darkTheme = createTheme({
-  palette: {
-    type: 'dark',
-    primary: {
-      main: '#90caf9',
+export const darkTheme = responsiveFontSizes(
+  createTheme({
+    palette: {
+      type: 'dark',
+      primary: {
+        main: '#90caf9',
+      },
+      secondary: {
+        main: '#f48fb1',
+      },
+      background: {
+        default: '#212121',
+        paper: '#424242',
+      },
     },
-    secondary: {
-      main: '#f48fb1',
-    },
-    background: {
-      default: '#212121',
-      paper: '#424242',
-    },
-  },
-})
+  })
+)
