@@ -79,8 +79,22 @@ function Nav() {
               open={open}
               onClose={() => setOpen(false)}
               onOpen={() => setOpen(true)}
+              PaperProps={{
+                sx: { width: '75vw' },
+              }}
             >
               <List>
+                <ListItem
+                  key="brew-logo"
+                  onClick={() => setOpen(false)}
+                  component={NavLink}
+                  to="/"
+                >
+                  <ListItemIcon>
+                    <Science />
+                  </ListItemIcon>
+                  <ListItemText>Brew!</ListItemText>
+                </ListItem>
                 {pages.map((page) => (
                   <ListItem
                     key={page.text}
