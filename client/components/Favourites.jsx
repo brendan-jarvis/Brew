@@ -37,7 +37,7 @@ function Favourites() {
 
   return (
     <Container>
-      <h1>Favourites</h1>
+      <Typography variant="h1">Favourites</Typography>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>

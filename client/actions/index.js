@@ -1,7 +1,6 @@
 import request from 'superagent'
 import { supabase } from '../utils/supabase'
 
-export const REQUEST_BEER = 'REQUEST_BEER'
 export const RECEIVE_BEER = 'RECEIVE_BEER'
 export const RECEIVE_A_BEER = 'RECEIVE_A_BEER'
 
@@ -21,12 +20,6 @@ export const FETCH_FAVOURITES = 'FETCH_FAVOURITES'
 export const ADD_FAVOURITE = 'ADD_FAVOURITE'
 export const UPDATE_FAVOURITE = 'UPDATE_FAVOURITES'
 export const REMOVE_FAVOURITE = 'REMOVE_FAVOURITE'
-
-export function requestBeer() {
-  return {
-    type: REQUEST_BEER,
-  }
-}
 
 export function requestSearch() {
   return {
@@ -106,7 +99,6 @@ export function updateSettings(settings) {
 
 export function fetchABeer(id) {
   return async (dispatch) => {
-    dispatch(requestBeer())
     try {
       const res = await request.get(`https://api.punkapi.com/v2/beers/${id}`)
       dispatch(receiveABeer(res.body))
@@ -118,7 +110,6 @@ export function fetchABeer(id) {
 
 export function fetchRandomBeer() {
   return async (dispatch) => {
-    dispatch(requestBeer())
     try {
       const res = await request.get(`https://api.punkapi.com/v2/beers/random`)
       dispatch(receiveBeer(res.body))
@@ -231,6 +222,7 @@ export function getFavourites(id) {
         .from('favourites')
         .select('*')
         .eq('user_id', id)
+        .order('inserted_at', { ascending: false })
 
       dispatch(fetchFavourites(data))
 

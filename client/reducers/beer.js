@@ -5,7 +5,7 @@ function beer(state = [], action) {
 
   switch (type) {
     case RECEIVE_A_BEER:
-      return payload
+      return payload[0]
     default:
       return state
   }
