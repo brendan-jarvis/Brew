@@ -57,6 +57,8 @@ const Auth = () => {
 
     setLoading(true)
 
+    const email = emailRef.current.value
+
     if (email === null || email === '') {
       setHelperText({ error: true, text: 'You must enter your email.' })
       setLoading(false)
@@ -86,7 +88,7 @@ const Auth = () => {
           type="email"
           name="email"
           label="Email"
-          ref={emailRef}
+          inputRef={emailRef}
           fullWidth
           required
         />
@@ -95,7 +97,7 @@ const Auth = () => {
           type="password"
           name="password"
           label="Password"
-          ref={passwordRef}
+          inputRef={passwordRef}
           fullWidth
           required
         />
