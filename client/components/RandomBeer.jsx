@@ -7,7 +7,7 @@ import DisplayBeer from './DisplayBeer'
 import { fetchRandomBeer, getSettings } from '../actions'
 
 function RandomBeer() {
-  const session = supabase.auth.session()
+  const session = supabase.auth.getSession()
   const { user } = session
   const dispatch = useDispatch()
 

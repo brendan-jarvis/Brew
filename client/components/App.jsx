@@ -27,15 +27,26 @@ import {
 
 function App() {
   const [user, setUser] = useState(null)
+  const [session, setSession] = useState(null)
   const settings = useSelector((state) => state.settings)
-  const session = supabase.auth.session()
+  // const session = supabase.auth.getSession()
   const dispatch = useDispatch()
 
   useEffect(() => {
+    supabase.auth
+      .getSession()
+      .then(({ data: { session } }) => {
+        setSession(session)
+      })
+      .catch((error) => {
+        console.log('error', error)
+      })
+
     setUser(session?.user ?? null)
 
     const { data: authListener } = supabase.auth.onAuthStateChange(
       async (event, session) => {
+        setSession(session)
         const currentUser = session?.user
         setUser(currentUser ?? null)
 
@@ -62,7 +73,7 @@ function App() {
     )
 
     return () => {
-      authListener?.unsubscribe()
+      authListener?.subscription.unsubscribe()
     }
   }, [user])
 
@@ -80,7 +91,7 @@ function App() {
             path="/account"
             element={
               <Account
-                key={session?.user.id ?? null}
+                key={session?.user?.id ?? null}
                 session={session ?? null}
               />
             }

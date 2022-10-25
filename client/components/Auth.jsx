@@ -28,7 +28,7 @@ const Auth = () => {
 
     const { data, error } =
       type === 'LOGIN'
-        ? await supabase.auth.signIn({
+        ? await supabase.auth.signInWithPassword({
             email,
             password,
           })

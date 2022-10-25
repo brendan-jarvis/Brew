@@ -36,7 +36,7 @@ const pages = [
 ]
 
 function Nav() {
-  const session = supabase.auth.session()
+  const session = supabase.auth.getSession()
 
   const [open, setOpen] = useState(false)
 

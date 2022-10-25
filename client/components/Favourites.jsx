@@ -23,7 +23,7 @@ import { getFavourites, updateFavourite, deleteFavourite } from '../actions'
 
 function Favourites() {
   const favourites = useSelector((state) => state.favourites)
-  const session = supabase.auth.session()
+  const session = supabase.auth.getSession()
   const dispatch = useDispatch()
   const { user } = session
 
