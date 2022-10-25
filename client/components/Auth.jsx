@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { supabase } from '../utils/supabase'
 import {
   Alert,
@@ -13,13 +13,16 @@ import { useNavigate } from 'react-router-dom'
 
 const Auth = () => {
   const [helperText, setHelperText] = useState({ error: null, text: null })
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const emailRef = useRef(null)
+  const passwordRef = useRef(null)
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
   const handleLogin = async (e, type) => {
     e.preventDefault()
+
+    const email = emailRef.current.value
+    const password = passwordRef.current.value
 
     setLoading(true)
 
@@ -83,8 +86,7 @@ const Auth = () => {
           type="email"
           name="email"
           label="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          ref={emailRef}
           fullWidth
           required
         />
@@ -93,8 +95,7 @@ const Auth = () => {
           type="password"
           name="password"
           label="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          ref={passwordRef}
           fullWidth
           required
         />
