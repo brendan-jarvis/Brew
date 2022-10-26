@@ -29,7 +29,6 @@ function App() {
   const [user, setUser] = useState(null)
   const [session, setSession] = useState(null)
   const settings = useSelector((state) => state.settings)
-  // const session = supabase.auth.getSession()
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -80,22 +79,14 @@ function App() {
   return (
     <ThemeProvider theme={settings.dark_mode ? darkTheme : lightTheme}>
       <div className="container">
-        <Nav />
+        {/* <Nav /> */}
         <ErrorMessage />
       </div>
       <div className="container">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/auth" element={<Auth />} />
-          <Route
-            path="/account"
-            element={
-              <Account
-                key={session?.user?.id ?? null}
-                session={session ?? null}
-              />
-            }
-          />
+          <Route path="/account" element={<Account />} />
           <Route path="/favourites" element={<Favourites />} />
           <Route path="/search" element={<SearchForm />} />
           <Route path="/random" element={<RandomBeer />} />

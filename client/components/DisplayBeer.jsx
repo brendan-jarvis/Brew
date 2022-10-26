@@ -10,6 +10,7 @@ import {
   TableRow,
   Typography,
 } from '@mui/material'
+import { supabase } from '../utils/supabase'
 
 import { insertFavourite } from '../actions'
 
@@ -24,9 +25,11 @@ import {
 
 import md5 from 'md5'
 
-function DisplayBeer({ beer }) {
+async function DisplayBeer({ beer }) {
   const settings = useSelector((state) => state.settings)
-  const session = useSelector((state) => state.session)
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
   const { user } = session
   const dispatch = useDispatch()
 

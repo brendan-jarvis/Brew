@@ -21,11 +21,14 @@ import { DeleteForever, Launch } from '@mui/icons-material'
 
 import { getFavourites, updateFavourite, deleteFavourite } from '../actions'
 
-function Favourites() {
+async function Favourites() {
   const favourites = useSelector((state) => state.favourites)
-  const session = supabase.auth.getSession()
-  const dispatch = useDispatch()
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
   const { user } = session
+
+  const dispatch = useDispatch()
 
   useEffect(() => {
     dispatch(getFavourites(user.id))

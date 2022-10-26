@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Button, Stack, Table } from 'react-bootstrap'
+import { Button, Table, Stack } from '@mui/material'
 
 import { SRMToRGBCSS } from '../utils/Utils'
 

@@ -15,21 +15,30 @@ import { supabase } from '../utils/supabase'
 
 import { getSettings, editSettings } from '../actions'
 
-const Account = ({ session }) => {
+const Account = async () => {
   const [loading, setLoading] = useState(true)
   const [username, setUsername] = useState(null)
   const [website, setWebsite] = useState(null)
   const [avatar_url, setAvatarUrl] = useState(null)
   const settings = useSelector((state) => state.settings)
+  const [session, setSession] = useState(null)
   const dispatch = useDispatch()
-  const { user } = session
+
+  supabase.auth
+    .getSession()
+    .then(({ data: { session } }) => {
+      setSession(session)
+    })
+    .catch((error) => {
+      console.log('error', error)
+    })
 
   const navigate = useNavigate()
 
   useEffect(() => {
     getProfile()
 
-    dispatch(getSettings(user.id))
+    dispatch(getSettings(session.user.id))
   }, [session])
 
   const getProfile = async () => {
@@ -39,7 +48,7 @@ const Account = ({ session }) => {
       let { data, error, status } = await supabase
         .from('profiles')
         .select(`username, website, avatar_url`)
-        .eq('id', user.id)
+        .eq('id', session.user.id)
         .single()
 
       if (error && status !== 406) {
@@ -65,7 +74,7 @@ const Account = ({ session }) => {
       setLoading(true)
 
       const updates = {
-        id: user.id,
+        id: session.user.id,
         username,
         website,
         avatar_url,
@@ -128,7 +137,7 @@ const Account = ({ session }) => {
           /> */}
 
           <Typography variant="body1" gutterBottom>
-            Email: {user.email}
+            Email: {session.user.email}
           </Typography>
           <TextField
             id="username"

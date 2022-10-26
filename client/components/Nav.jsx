@@ -35,8 +35,11 @@ const pages = [
   { text: 'Random', icon: Shuffle },
 ]
 
-function Nav() {
-  const session = supabase.auth.getSession()
+async function Nav() {
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
+  const { user } = session
 
   const [open, setOpen] = useState(false)
 
@@ -150,11 +153,9 @@ function Nav() {
                 <IconButton component={NavLink} to="/account" sx={{ p: 0 }}>
                   <Avatar
                     src={
-                      session?.user.avatar_url
-                        ? session?.user.avatar_url
-                        : `https://www.gravatar.com/avatar/${md5(
-                            session?.user.email
-                          )}`
+                      user.avatar_url
+                        ? user.avatar_url
+                        : `https://www.gravatar.com/avatar/${md5(user.email)}`
                     }
                     alt={`${session?.user.username} avatar`}
                   />

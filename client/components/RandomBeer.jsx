@@ -6,15 +6,17 @@ import DisplayBeer from './DisplayBeer'
 
 import { fetchRandomBeer, getSettings } from '../actions'
 
-function RandomBeer() {
-  const session = supabase.auth.getSession()
-  const { user } = session
+async function RandomBeer() {
+  // const {
+  //   data: { session },
+  // } = await supabase.auth.getSession()
+  // const { user } = session
   const dispatch = useDispatch()
 
   const randomBeer = useSelector((state) => state.randomBeer)
 
   useEffect(() => {
-    dispatch(getSettings(user.id))
+    // dispatch(getSettings(user.id))
   }, [])
 
   const handleSubmit = (e) => {
