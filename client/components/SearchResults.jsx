@@ -1,29 +1,48 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Button, Table, Stack } from '@mui/material'
+import { NavLink } from 'react-router-dom'
+import {
+  Box,
+  Button,
+  Container,
+  Table,
+  Typography,
+  Stack,
+  TableCell,
+  TableRow,
+  TableHead,
+} from '@mui/material'
 
 import { SRMToRGBCSS } from '../utils/Utils'
 
-import { addFavourite } from '../actions'
+import { insertFavourite } from '../actions'
 
 import md5 from 'md5'
 
 function RandomBeer() {
   const dispatch = useDispatch()
   const searchResults = useSelector((state) => state.searchBeerRecipes)
+  const session = useSelector((state) => state.session)
+  const { user } = session
+  const [isFavourite, setIsFavourite] = useState({})
 
-  const handleFavourite = (e) => {
-    const beer = { brewdog_id: e.target.id, name: e.target.name }
-
-    e.target.className = 'btn btn-success disabled'
-
-    e.target.innerText = 'Saved to favourites!'
-
-    dispatch(addFavourite(beer))
+  const handleFavourite = async (id, name) => {
+    try {
+      const favourite = {
+        user_id: user.id,
+        brewdog_id: id,
+        name: name,
+        inserted_at: new Date(),
+      }
+      setIsFavourite(() => ({ ...isFavourite, [name]: true }))
+      dispatch(insertFavourite(favourite))
+    } catch (error) {
+      console.log(error.message)
+    }
   }
 
   return (
-    <div className="container">
+    <Container>
       {searchResults?.map((beer) => {
         // Remove duplicates and sort alphabetically.
         const hops = beer.ingredients.hops.map((hop) => hop.name)
@@ -34,49 +53,57 @@ function RandomBeer() {
         const uniqueMalts = [...new Set(malts)]
 
         return (
-          <div key={md5(beer.id + beer.name)}>
+          <Box key={md5(beer.id + beer.name)}>
             <Stack>
-              <h3 className="text-center">
-                <a href={`/beer/${beer.id}`} className="link-dark">
-                  #{beer.id} {beer.name}
-                </a>
-              </h3>
-              <Button
-                variant="secondary"
-                id={beer.id}
-                name={beer.name}
-                onClick={(e) => handleFavourite(e)}
+              <Typography
+                variant="h3"
+                align="center"
+                component={NavLink}
+                to={`/beer/${beer.id}`}
               >
-                Add to Favourites
+                #{beer.id} {beer.name}
+              </Typography>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => handleFavourite(beer.id, beer.name)}
+                disabled={!user || isFavourite[beer.name]}
+              >
+                {isFavourite[beer.name]
+                  ? 'Added to Favourites'
+                  : 'Add to Favourites'}
               </Button>
-              <p>{beer.description}</p>
-              <p>
+              <Typography variant="body1"></Typography>
+              <Typography variant="body1" gutterBottom>
+                {beer.description}
+              </Typography>
+              <Typography variant="body1" paragraph>
                 <b>Malt:</b>{' '}
                 {uniqueMalts
                   .map((malt) => {
                     return malt
                   })
                   .join(', ') + '.'}
-              </p>
-              <p>
+              </Typography>
+              <Typography variant="body1" paragraph>
                 <b>Hops:</b>{' '}
                 {uniqueHops
                   .map((hop) => {
                     return hop
                   })
                   .join(', ') + '.'}
-              </p>
-              <p>
+              </Typography>
+              <Typography variant="body1" paragraph>
                 <b>Yeast:</b> {beer.ingredients.yeast}.
-              </p>
+              </Typography>
               {beer.srm && (
-                <Stack direction="horizontal" gap={1}>
-                  <div>
+                <Stack direction="row" spacing={1}>
+                  <Box>
                     <p>
                       <b>Colour: </b>
                     </p>
-                  </div>
-                  <div>
+                  </Box>
+                  <Box>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       style={{ height: '45px' }}
@@ -90,40 +117,40 @@ function RandomBeer() {
                         fill={SRMToRGBCSS(beer.srm)}
                       />
                     </svg>
-                  </div>
+                  </Box>
                 </Stack>
               )}
               <Table>
-                <thead>
-                  <tr>
-                    <th>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>
                       <abbr title="European Brewery Convention">EBC</abbr>
-                    </th>
-                    <th>
+                    </TableCell>
+                    <TableCell>
                       <abbr title="Standard Reference Method">SRM</abbr>
-                    </th>
-                    <th>
+                    </TableCell>
+                    <TableCell>
                       <abbr title="Alcohol By Volume">ABV</abbr>
-                    </th>
-                    <th>
+                    </TableCell>
+                    <TableCell>
                       <abbr title="International Bitterness Units">IBU</abbr>
-                    </th>
-                  </tr>
-                </thead>
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
                 <tbody>
-                  <tr>
-                    <td>{beer.ebc}</td>
-                    <td>{beer.srm}</td>
-                    <td>{beer.abv}%</td>
-                    <td>{beer.ibu}</td>
-                  </tr>
+                  <TableRow>
+                    <TableCell>{beer.ebc}</TableCell>
+                    <TableCell>{beer.srm}</TableCell>
+                    <TableCell>{beer.abv}%</TableCell>
+                    <TableCell>{beer.ibu}</TableCell>
+                  </TableRow>
                 </tbody>
               </Table>
             </Stack>
-          </div>
+          </Box>
         )
       })}
-    </div>
+    </Container>
   )
 }
 

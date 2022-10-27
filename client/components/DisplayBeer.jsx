@@ -59,6 +59,9 @@ function DisplayBeer({ beer }) {
   return (
     <Box key={md5(beer)}>
       <div>
+        <Typography variant="h2" align="center">
+          {beer.name}
+        </Typography>
         <Typography variant="h3" align="center">
           {beer.tagline}
         </Typography>
