@@ -99,9 +99,9 @@ function RandomBeer() {
               {beer.srm && (
                 <Stack direction="row" spacing={1}>
                   <Box>
-                    <p>
+                    <Typography variant="body1">
                       <b>Colour: </b>
-                    </p>
+                    </Typography>
                   </Box>
                   <Box>
                     <svg
