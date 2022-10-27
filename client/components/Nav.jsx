@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { NavLink } from 'react-router-dom'
 import { supabase } from '../utils/supabase'
 import md5 from 'md5'
@@ -28,6 +28,7 @@ import {
   Search,
   Shuffle,
 } from '@mui/icons-material'
+import { useSelector } from 'react-redux'
 
 const pages = [
   { text: 'Favourites', icon: Favorite },
@@ -35,11 +36,34 @@ const pages = [
   { text: 'Random', icon: Shuffle },
 ]
 
-async function Nav() {
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
+function Nav() {
+  const session = useSelector((state) => state.session)
   const { user } = session
+  const [avatar_url, setAvatarUrl] = useState(null)
+
+  useEffect(() => {
+    getProfile()
+  }, [session])
+
+  const getProfile = async () => {
+    try {
+      let { data, error, status } = await supabase
+        .from('profiles')
+        .select(`avatar_url`)
+        .eq('id', user.id)
+        .single()
+
+      if (error && status !== 406) {
+        throw error
+      }
+
+      if (data) {
+        setAvatarUrl(data.avatar_url)
+      }
+    } catch (error) {
+      console.log('Not logged in:', error.message)
+    }
+  }
 
   const [open, setOpen] = useState(false)
 
@@ -148,16 +172,16 @@ async function Nav() {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            {session?.user ? (
+            {user?.email ? (
               <Tooltip title="Edit profile">
                 <IconButton component={NavLink} to="/account" sx={{ p: 0 }}>
                   <Avatar
                     src={
-                      user.avatar_url
-                        ? user.avatar_url
+                      avatar_url
+                        ? avatar_url
                         : `https://www.gravatar.com/avatar/${md5(user.email)}`
                     }
-                    alt={`${session?.user.username} avatar`}
+                    alt={`User avatar`}
                   />
                 </IconButton>
               </Tooltip>

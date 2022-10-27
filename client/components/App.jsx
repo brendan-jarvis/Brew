@@ -27,7 +27,7 @@ import {
 
 function App() {
   const [user, setUser] = useState(null)
-  const [session, setSession] = useState(null)
+  const session = useSelector((state) => state.session)
   const settings = useSelector((state) => state.settings)
   const dispatch = useDispatch()
 
@@ -35,7 +35,7 @@ function App() {
     supabase.auth
       .getSession()
       .then(({ data: { session } }) => {
-        setSession(session)
+        dispatch(storeSession(session))
       })
       .catch((error) => {
         console.log('error', error)
@@ -45,7 +45,7 @@ function App() {
 
     const { data: authListener } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        setSession(session)
+        dispatch(storeSession(session))
         const currentUser = session?.user
         setUser(currentUser ?? null)
 
@@ -79,7 +79,7 @@ function App() {
   return (
     <ThemeProvider theme={settings.dark_mode ? darkTheme : lightTheme}>
       <div className="container">
-        {/* <Nav /> */}
+        <Nav />
         <ErrorMessage />
       </div>
       <div className="container">

@@ -1,22 +1,18 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Button, Box, Container, Typography } from '@mui/material'
-import { supabase } from '../utils/supabase'
 import DisplayBeer from './DisplayBeer'
 
 import { fetchRandomBeer, getSettings } from '../actions'
 
-async function RandomBeer() {
-  // const {
-  //   data: { session },
-  // } = await supabase.auth.getSession()
-  // const { user } = session
+function RandomBeer() {
+  const session = useSelector((state) => state.session)
   const dispatch = useDispatch()
 
   const randomBeer = useSelector((state) => state.randomBeer)
 
   useEffect(() => {
-    // dispatch(getSettings(user.id))
+    dispatch(getSettings(session?.user.id))
   }, [])
 
   const handleSubmit = (e) => {

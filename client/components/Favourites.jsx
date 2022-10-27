@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { NavLink } from 'react-router-dom'
-import { supabase } from '../utils/supabase'
 import md5 from 'md5'
 import {
   Button,
@@ -21,17 +20,17 @@ import { DeleteForever, Launch } from '@mui/icons-material'
 
 import { getFavourites, updateFavourite, deleteFavourite } from '../actions'
 
-async function Favourites() {
+function Favourites() {
   const favourites = useSelector((state) => state.favourites)
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
+  const session = useSelector((state) => state.session)
   const { user } = session
 
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(getFavourites(user.id))
+    if (user?.id) {
+      dispatch(getFavourites(user.id))
+    }
   }, [])
 
   const handleDelete = (id) => {

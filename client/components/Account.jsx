@@ -15,23 +15,14 @@ import { supabase } from '../utils/supabase'
 
 import { getSettings, editSettings } from '../actions'
 
-const Account = async () => {
+function Account() {
   const [loading, setLoading] = useState(true)
   const [username, setUsername] = useState(null)
   const [website, setWebsite] = useState(null)
   const [avatar_url, setAvatarUrl] = useState(null)
   const settings = useSelector((state) => state.settings)
-  const [session, setSession] = useState(null)
+  const session = useSelector((state) => state.session)
   const dispatch = useDispatch()
-
-  supabase.auth
-    .getSession()
-    .then(({ data: { session } }) => {
-      setSession(session)
-    })
-    .catch((error) => {
-      console.log('error', error)
-    })
 
   const navigate = useNavigate()
 
