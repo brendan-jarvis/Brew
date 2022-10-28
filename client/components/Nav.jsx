@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { NavLink } from 'react-router-dom'
 import { supabase } from '../utils/supabase'
 import md5 from 'md5'
@@ -35,8 +35,34 @@ const pages = [
   { text: 'Random', icon: Shuffle },
 ]
 
-function Nav() {
-  const session = supabase.auth.session()
+const Nav = ({ session }) => {
+  const [avatar_url, setAvatarUrl] = useState(null)
+
+  useEffect(() => {
+    getProfile()
+  }, [session])
+
+  const getProfile = async () => {
+    try {
+      const { user } = session
+
+      let { data, error, status } = await supabase
+        .from('profiles')
+        .select(`avatar_url`)
+        .eq('id', user.id)
+        .single()
+
+      if (error && status !== 406) {
+        throw error
+      }
+
+      if (data) {
+        setAvatarUrl(data.avatar_url)
+      }
+    } catch (error) {
+      console.log('Not logged in:', error.message)
+    }
+  }
 
   const [open, setOpen] = useState(false)
 
@@ -145,18 +171,18 @@ function Nav() {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            {session?.user ? (
+            {session?.user?.email ? (
               <Tooltip title="Edit profile">
                 <IconButton component={NavLink} to="/account" sx={{ p: 0 }}>
                   <Avatar
                     src={
-                      session?.user.avatar_url
-                        ? session?.user.avatar_url
+                      avatar_url
+                        ? avatar_url
                         : `https://www.gravatar.com/avatar/${md5(
                             session?.user.email
                           )}`
                     }
-                    alt={`${session?.user.username} avatar`}
+                    alt={`User avatar`}
                   />
                 </IconButton>
               </Tooltip>

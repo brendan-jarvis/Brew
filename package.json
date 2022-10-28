@@ -1,5 +1,5 @@
 {
-  "name": "Brew",
+  "name": "brew",
   "version": "1.0.0",
   "main": "server/index.js",
   "license": "MIT",
@@ -35,12 +35,11 @@
     ]
   },
   "dependencies": {
-    "@auth0/auth0-react": "^1.11.0",
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
     "@mui/icons-material": "^5.10.3",
     "@mui/material": "^5.10.5",
-    "@supabase/supabase-js": "^1.35.7",
+    "@supabase/supabase-js": "^2.0.4",
     "bootstrap": "^5.2.1",
     "dotenv": "^16.0.3",
     "dotenv-webpack": "^8.0.1",
@@ -48,7 +47,6 @@
     "knex": "^2.1.0",
     "md5": "^2.3.0",
     "react": "^17.0.2",
-    "react-bootstrap": "^2.5.0",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.5",
     "react-router-dom": "^6.2.2",

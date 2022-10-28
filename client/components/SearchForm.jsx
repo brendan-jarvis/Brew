@@ -1,7 +1,13 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { Slider } from '@mui/material'
-import { Button, Form, Row } from 'react-bootstrap'
+import {
+  Button,
+  Container,
+  Slider,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material'
 
 // Actions
 import { searchBeerRecipes } from '../actions'
@@ -9,7 +15,7 @@ import { searchBeerRecipes } from '../actions'
 // Components
 import SearchResults from './SearchResults'
 
-function SearchForm() {
+const SearchForm = ({ session }) => {
   const dispatch = useDispatch()
 
   // abv range 0 to 56
@@ -25,98 +31,26 @@ function SearchForm() {
     name: '',
   })
 
-  const abvMarks = [
-    {
-      value: 0,
-      label: '0%',
-    },
-    {
-      value: 5,
-      label: '5%',
-    },
-    {
-      value: 10,
-      label: '10%',
-    },
-    {
-      value: 15,
-      label: '15%',
-    },
-    {
-      value: 20,
-      label: '20%',
-    },
-    {
-      value: 25,
-      label: '25%',
-    },
-    {
-      value: 30,
-      label: '30%',
-    },
-  ]
+  const abvMarks = [0, 5, 10, 15, 20, 25, 30].map((value) => {
+    return {
+      value: value,
+      label: value,
+    }
+  })
 
-  const ibuMarks = [
-    {
-      value: 0,
-      label: '0',
-    },
-    {
-      value: 25,
-      label: '25',
-    },
-    {
-      value: 50,
-      label: '50',
-    },
-    {
-      value: 75,
-      label: '75',
-    },
-    {
-      value: 100,
-      label: '100',
-    },
-    {
-      value: 125,
-      label: '125',
-    },
-    {
-      value: 150,
-      label: '150',
-    },
-  ]
+  const ibuMarks = [0, 25, 50, 75, 100, 125, 150].map((value) => {
+    return {
+      value: value,
+      label: value,
+    }
+  })
 
-  const ebcMarks = [
-    {
-      value: 0,
-      label: '0',
-    },
-    {
-      value: 5,
-      label: '5',
-    },
-    {
-      value: 10,
-      label: '10',
-    },
-    {
-      value: 20,
-      label: '20',
-    },
-    {
-      value: 30,
-      label: '30',
-    },
-    {
-      value: 40,
-      label: '40',
-    },
-    {
-      value: 50,
-      label: '50',
-    },
-  ]
+  const ebcMarks = [0, 5, 10, 20, 30, 40, 50].map((value) => {
+    return {
+      value: value,
+      label: value,
+    }
+  })
 
   const handleChange = (evt) => {
     // const key = evt.target.name
@@ -146,11 +80,10 @@ function SearchForm() {
   }
 
   return (
-    <div className="container">
-      <Form as={Row}>
-        <Form.Group>
-          <Form.Label htmlFor="ABV range">ABV:</Form.Label>
-
+    <Container>
+      <form>
+        <Stack spacing={2}>
+          <Typography id="input-slider">ABV Range</Typography>
           <Slider
             getAriaLabel={() => 'ABV range'}
             value={query.abv}
@@ -161,8 +94,9 @@ function SearchForm() {
             valueLabelDisplay="auto"
             onChange={handleChangeAbv}
             getAriaValueText={() => `${query.abv}%`}
+            label="ABV Range"
           />
-          <Form.Label htmlFor="IBU range">IBU:</Form.Label>
+          <Typography id="input-slider">IBU Range</Typography>
           <Slider
             getAriaLabel={() => 'IBU range'}
             value={query.ibu}
@@ -173,8 +107,9 @@ function SearchForm() {
             valueLabelDisplay="auto"
             onChange={handleChangeIbu}
             getAriaValueText={() => `${query.ibu}`}
+            label="IBU Range"
           />
-          <Form.Label htmlFor="EBC range">EBC:</Form.Label>
+          <Typography id="input-slider">EBC Range</Typography>
           <Slider
             getAriaLabel={() => 'EBC range'}
             value={query.ebc}
@@ -185,54 +120,52 @@ function SearchForm() {
             valueLabelDisplay="auto"
             onChange={handleChangeEbc}
             getAriaValueText={() => `${query.ebu}`}
+            label="EBC Range"
           />
-          <Form.Label htmlFor="name">Name:</Form.Label>
-          <Form.Control
+          <TextField
             type="text"
             name="name"
             id="name"
             value={query.name}
             onChange={handleChange}
+            label="Name"
           />
-          <Form.Label htmlFor="malt">Malt:</Form.Label>
-          <Form.Control
+          <TextField
             type="text"
             name="malt"
             id="malt"
             value={query.malt}
             onChange={handleChange}
+            label="Malt"
           />
-          <Form.Label htmlFor="hops">Hops:</Form.Label>
-          <Form.Control
+          <TextField
             type="text"
             name="hops"
             id="hops"
             value={query.hops}
             onChange={handleChange}
+            label="Hops"
           />
-          <Form.Label htmlFor="yeast">Yeast:</Form.Label>
-          <Form.Control
+          <TextField
             type="text"
             name="yeast"
             id="yeast"
             value={query.yeast}
             onChange={handleChange}
+            label="Yeast"
           />
-          <div className="text-center">
-            <Button
-              variant="primary"
-              type="submit"
-              value="Search for Recipes"
-              onClick={handleSearchSubmit}
-            >
-              Submit
-            </Button>
-          </div>
-        </Form.Group>
-      </Form>
+          <Button
+            variant="contained"
+            value="Search for Recipes"
+            onClick={handleSearchSubmit}
+          >
+            Submit
+          </Button>
+        </Stack>
+      </form>
 
-      {<SearchResults />}
-    </div>
+      {<SearchResults session={session} />}
+    </Container>
   )
 }
 

@@ -11,7 +11,7 @@ import {
 } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../utils/supabase'
-// import md5 from 'md5'
+import md5 from 'md5'
 
 import { getSettings, editSettings } from '../actions'
 
@@ -21,8 +21,8 @@ const Account = ({ session }) => {
   const [website, setWebsite] = useState(null)
   const [avatar_url, setAvatarUrl] = useState(null)
   const settings = useSelector((state) => state.settings)
-  const dispatch = useDispatch()
   const { user } = session
+  const dispatch = useDispatch()
 
   const navigate = useNavigate()
 
@@ -114,7 +114,7 @@ const Account = ({ session }) => {
           Profile
         </Typography>
         <Stack spacing={2}>
-          {/* <Container
+          <Container
             component="img"
             sx={{
               width: '200px',
@@ -125,7 +125,7 @@ const Account = ({ session }) => {
                 : `https://www.gravatar.com/avatar/${md5(user.email)}`
             }
             alt={`${username} avatar`}
-          /> */}
+          />
 
           <Typography variant="body1" gutterBottom>
             Email: {user.email}
