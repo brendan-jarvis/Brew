@@ -24,6 +24,7 @@ import {
   clearSession,
   getSettings,
   clearSettings,
+  getFavourites,
 } from '../actions'
 
 function App() {
@@ -36,6 +37,11 @@ function App() {
       .getSession()
       .then(({ data: { session } }) => {
         dispatch(storeSession(session))
+
+        if (session) {
+          dispatch(getSettings(session.user.id))
+          dispatch(getFavourites(session.user.id))
+        }
       })
       .catch((error) => {
         console.log('error', error)

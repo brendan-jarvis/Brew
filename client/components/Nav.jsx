@@ -60,7 +60,7 @@ const Nav = ({ session }) => {
         setAvatarUrl(data.avatar_url)
       }
     } catch (error) {
-      console.log('Not logged in:', error.message)
+      console.log(error.message)
     }
   }
 

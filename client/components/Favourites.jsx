@@ -29,10 +29,7 @@ const Favourites = ({ session }) => {
     try {
       dispatch(getFavourites(session.user.id))
     } catch (error) {
-      console.log(
-        'You must be logged in to view your favourites:',
-        error.message
-      )
+      console.log(error.message)
     }
   }, [session])
 
