@@ -28,7 +28,6 @@ import {
   Search,
   Shuffle,
 } from '@mui/icons-material'
-import { useSelector } from 'react-redux'
 
 const pages = [
   { text: 'Favourites', icon: Favorite },
@@ -36,9 +35,7 @@ const pages = [
   { text: 'Random', icon: Shuffle },
 ]
 
-function Nav() {
-  const session = useSelector((state) => state.session)
-  const { user } = session
+const Nav = ({ session }) => {
   const [avatar_url, setAvatarUrl] = useState(null)
 
   useEffect(() => {
@@ -47,6 +44,8 @@ function Nav() {
 
   const getProfile = async () => {
     try {
+      const { user } = session
+
       let { data, error, status } = await supabase
         .from('profiles')
         .select(`avatar_url`)
@@ -172,14 +171,16 @@ function Nav() {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            {user?.email ? (
+            {session?.user?.email ? (
               <Tooltip title="Edit profile">
                 <IconButton component={NavLink} to="/account" sx={{ p: 0 }}>
                   <Avatar
                     src={
                       avatar_url
                         ? avatar_url
-                        : `https://www.gravatar.com/avatar/${md5(user.email)}`
+                        : `https://www.gravatar.com/avatar/${md5(
+                            session?.user.email
+                          )}`
                     }
                     alt={`User avatar`}
                   />

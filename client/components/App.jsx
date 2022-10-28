@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { supabase } from '../utils/supabase'
 import { Routes, Route } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
@@ -26,7 +26,6 @@ import {
 } from '../actions'
 
 function App() {
-  const [user, setUser] = useState(null)
   const session = useSelector((state) => state.session)
   const settings = useSelector((state) => state.settings)
   const dispatch = useDispatch()
@@ -41,57 +40,54 @@ function App() {
         console.log('error', error)
       })
 
-    setUser(session?.user ?? null)
+    supabase.auth.onAuthStateChange(async (event, session) => {
+      dispatch(storeSession(session))
 
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        dispatch(storeSession(session))
-        const currentUser = session?.user
-        setUser(currentUser ?? null)
+      const currentUser = session?.user ?? null
 
-        if (event == 'SIGNED_IN' || event == 'USER_UPDATED') {
-          dispatch(getSettings(currentUser.id))
-          dispatch(storeSession(session))
-        }
-        if (event == 'SIGNED_OUT') {
-          dispatch(clearSession())
-          dispatch(clearSettings())
-        }
-        if (event == 'PASSWORD_RECOVERY') {
-          const newPassword = prompt(
-            'What would you like your new password to be?'
-          )
-          const { data, error } = await supabase.auth.updateUser({
-            password: newPassword,
-          })
-
-          if (data) alert('Password updated successfully!')
-          if (error) alert('There was an error updating your password.')
-        }
+      if (event == 'SIGNED_IN') {
+        dispatch(getSettings(currentUser.id))
       }
-    )
+      if (event == 'SIGNED_OUT') {
+        dispatch(clearSession())
+        dispatch(clearSettings())
+      }
+      if (event == 'USER_UPDATED') {
+        dispatch(getSettings(currentUser.id))
+      }
+      if (event == 'PASSWORD_RECOVERY') {
+        const newPassword = prompt(
+          'What would you like your new password to be?'
+        )
+        const { data, error } = await supabase.auth.updateUser({
+          password: newPassword,
+        })
 
-    return () => {
-      authListener?.subscription.unsubscribe()
-    }
-  }, [user])
+        if (data) alert('Password updated successfully!')
+        if (error) alert('There was an error updating your password.')
+      }
+    })
+  }, [])
 
   return (
     <ThemeProvider theme={settings.dark_mode ? darkTheme : lightTheme}>
       <div className="container">
-        <Nav />
+        <Nav session={session} />
         <ErrorMessage />
       </div>
       <div className="container">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/auth" element={<Auth />} />
-          <Route path="/account" element={<Account />} />
-          <Route path="/favourites" element={<Favourites />} />
-          <Route path="/search" element={<SearchForm />} />
-          <Route path="/random" element={<RandomBeer />} />
+          <Route path="/account" element={<Account session={session} />} />
+          <Route
+            path="/favourites"
+            element={<Favourites session={session} />}
+          />
+          <Route path="/search" element={<SearchForm session={session} />} />
+          <Route path="/random" element={<RandomBeer session={session} />} />
           <Route path="/beer/">
-            <Route path=":id" element={<Beer />} />
+            <Route path=":id" element={<Beer session={session} />} />
           </Route>
         </Routes>
       </div>

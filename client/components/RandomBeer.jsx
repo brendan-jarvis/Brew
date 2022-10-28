@@ -1,18 +1,23 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Button, Box, Container, Typography } from '@mui/material'
+import {
+  Button,
+  Box,
+  Container,
+  LinearProgress,
+  Typography,
+} from '@mui/material'
 import DisplayBeer from './DisplayBeer'
 
-import { fetchRandomBeer, getSettings } from '../actions'
+import { fetchRandomBeer } from '../actions'
 
-function RandomBeer() {
-  const session = useSelector((state) => state.session)
+const RandomBeer = ({ session }) => {
   const dispatch = useDispatch()
 
   const randomBeer = useSelector((state) => state.randomBeer)
 
   useEffect(() => {
-    dispatch(getSettings(session?.user.id))
+    dispatch(fetchRandomBeer())
   }, [])
 
   const handleSubmit = (e) => {
@@ -23,17 +28,25 @@ function RandomBeer() {
 
   return (
     <Container>
-      <Box textAlign="center">
-        <Typography variant="h1">
-          {randomBeer.id
-            ? `#${randomBeer.id} ${randomBeer.name}`
-            : `Random Beer`}
-        </Typography>
-        <Button variant="contained" onClick={handleSubmit}>
-          Fetch Random Recipe
-        </Button>
-      </Box>
-      {randomBeer.id ? <DisplayBeer beer={randomBeer} /> : null}
+      {randomBeer.id ? (
+        <Box textAlign="center">
+          <Typography variant="h1">
+            #{randomBeer.id} {randomBeer.name}
+          </Typography>
+          <Button variant="contained" onClick={handleSubmit}>
+            Fetch Another Recipe
+          </Button>
+        </Box>
+      ) : (
+        <Box textAlign="center">
+          <LinearProgress color="secondary">
+            <span className="visually-hidden">Loading...</span>
+          </LinearProgress>
+        </Box>
+      )}
+      {randomBeer.id ? (
+        <DisplayBeer beer={randomBeer} session={session} />
+      ) : null}
     </Container>
   )
 }

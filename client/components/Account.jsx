@@ -11,17 +11,17 @@ import {
 } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../utils/supabase'
-// import md5 from 'md5'
+import md5 from 'md5'
 
 import { getSettings, editSettings } from '../actions'
 
-function Account() {
+const Account = ({ session }) => {
   const [loading, setLoading] = useState(true)
   const [username, setUsername] = useState(null)
   const [website, setWebsite] = useState(null)
   const [avatar_url, setAvatarUrl] = useState(null)
   const settings = useSelector((state) => state.settings)
-  const session = useSelector((state) => state.session)
+  const { user } = session
   const dispatch = useDispatch()
 
   const navigate = useNavigate()
@@ -29,7 +29,7 @@ function Account() {
   useEffect(() => {
     getProfile()
 
-    dispatch(getSettings(session.user.id))
+    dispatch(getSettings(user.id))
   }, [session])
 
   const getProfile = async () => {
@@ -39,7 +39,7 @@ function Account() {
       let { data, error, status } = await supabase
         .from('profiles')
         .select(`username, website, avatar_url`)
-        .eq('id', session.user.id)
+        .eq('id', user.id)
         .single()
 
       if (error && status !== 406) {
@@ -65,7 +65,7 @@ function Account() {
       setLoading(true)
 
       const updates = {
-        id: session.user.id,
+        id: user.id,
         username,
         website,
         avatar_url,
@@ -114,7 +114,7 @@ function Account() {
           Profile
         </Typography>
         <Stack spacing={2}>
-          {/* <Container
+          <Container
             component="img"
             sx={{
               width: '200px',
@@ -125,10 +125,10 @@ function Account() {
                 : `https://www.gravatar.com/avatar/${md5(user.email)}`
             }
             alt={`${username} avatar`}
-          /> */}
+          />
 
           <Typography variant="body1" gutterBottom>
-            Email: {session.user.email}
+            Email: {user.email}
           </Typography>
           <TextField
             id="username"

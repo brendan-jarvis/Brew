@@ -24,10 +24,8 @@ import {
 
 import md5 from 'md5'
 
-function DisplayBeer({ beer }) {
+const DisplayBeer = ({ beer, session }) => {
   const settings = useSelector((state) => state.settings)
-  const session = useSelector((state) => state.session)
-  const { user } = session
   const dispatch = useDispatch()
 
   const [isFavourite, setIsFavourite] = useState(false)
@@ -42,7 +40,7 @@ function DisplayBeer({ beer }) {
   const handleFavourite = async () => {
     try {
       const favourite = {
-        user_id: user.id,
+        user_id: session?.user.id,
         brewdog_id: beer.id,
         name: beer.name,
         inserted_at: new Date(),
@@ -68,16 +66,18 @@ function DisplayBeer({ beer }) {
         <Typography variant="body1" align="center">
           {beer.description}
         </Typography>
-        <Box textAlign="center">
-          <Button
-            variant="contained"
-            color={isFavourite ? 'secondary' : 'success'}
-            disabled={isFavourite}
-            onClick={handleFavourite}
-          >
-            {isFavourite ? 'Saved to favourites!' : 'Save to favourites!'}
-          </Button>
-        </Box>
+        {session && (
+          <Box textAlign="center">
+            <Button
+              variant="contained"
+              color={isFavourite ? 'secondary' : 'success'}
+              disabled={isFavourite}
+              onClick={handleFavourite}
+            >
+              {isFavourite ? 'Saved to favourites!' : 'Save to favourites!'}
+            </Button>
+          </Box>
+        )}
         <Typography variant="h5" align="center">
           Food pairing
         </Typography>

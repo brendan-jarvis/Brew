@@ -6,7 +6,7 @@ import { Box, LinearProgress, Container } from '@mui/material'
 import { fetchABeer } from '../actions'
 import DisplayBeer from './DisplayBeer'
 
-function Beer() {
+const Beer = ({ session }) => {
   const dispatch = useDispatch()
 
   const { id } = useParams()
@@ -20,7 +20,7 @@ function Beer() {
   return (
     <Container>
       {beer.id ? (
-        <DisplayBeer beer={beer} />
+        <DisplayBeer beer={beer} session={session} />
       ) : (
         <Box textAlign="center">
           <LinearProgress color="secondary">

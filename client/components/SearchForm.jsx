@@ -15,7 +15,7 @@ import { searchBeerRecipes } from '../actions'
 // Components
 import SearchResults from './SearchResults'
 
-function SearchForm() {
+const SearchForm = ({ session }) => {
   const dispatch = useDispatch()
 
   // abv range 0 to 56
@@ -164,7 +164,7 @@ function SearchForm() {
         </Stack>
       </form>
 
-      {<SearchResults />}
+      {<SearchResults session={session} />}
     </Container>
   )
 }

@@ -19,15 +19,15 @@ import { insertFavourite } from '../actions'
 
 import md5 from 'md5'
 
-function RandomBeer() {
+const SearchResults = ({ session }) => {
   const dispatch = useDispatch()
   const searchResults = useSelector((state) => state.searchBeerRecipes)
-  const session = useSelector((state) => state.session)
-  const { user } = session
   const [isFavourite, setIsFavourite] = useState({})
 
   const handleFavourite = async (id, name) => {
     try {
+      const { user } = session
+
       const favourite = {
         user_id: user.id,
         brewdog_id: id,
@@ -63,16 +63,18 @@ function RandomBeer() {
               >
                 #{beer.id} {beer.name}
               </Typography>
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={() => handleFavourite(beer.id, beer.name)}
-                disabled={!user || isFavourite[beer.name]}
-              >
-                {isFavourite[beer.name]
-                  ? 'Added to Favourites'
-                  : 'Add to Favourites'}
-              </Button>
+              {session && (
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={() => handleFavourite(beer.id, beer.name)}
+                  disabled={session == null || isFavourite[beer.name]}
+                >
+                  {isFavourite[beer.name]
+                    ? 'Added to Favourites'
+                    : 'Add to Favourites'}
+                </Button>
+              )}
               <Typography variant="body1"></Typography>
               <Typography variant="body1" gutterBottom>
                 {beer.description}
@@ -154,4 +156,4 @@ function RandomBeer() {
   )
 }
 
-export default RandomBeer
+export default SearchResults
