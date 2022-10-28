@@ -58,10 +58,10 @@ const DisplayBeer = ({ beer, session }) => {
   return (
     <Box key={md5(beer)}>
       <div>
-        <Typography variant="h2" align="center">
-          {beer.name}
+        <Typography variant="h1" align="center">
+          #{beer.id} {beer.name}
         </Typography>
-        <Typography variant="h3" align="center">
+        <Typography variant="h2" align="center">
           {beer.tagline}
         </Typography>
         <Typography variant="body1" align="center">
@@ -72,6 +72,7 @@ const DisplayBeer = ({ beer, session }) => {
             <Button
               variant="contained"
               color={isFavourite ? 'secondary' : 'success'}
+              sx={{ m: 2 }}
               disabled={isFavourite}
               onClick={handleFavourite}
             >

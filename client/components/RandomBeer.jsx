@@ -1,12 +1,6 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import {
-  Button,
-  Box,
-  Container,
-  LinearProgress,
-  Typography,
-} from '@mui/material'
+import { Button, Box, Container, LinearProgress } from '@mui/material'
 import DisplayBeer from './DisplayBeer'
 
 import { fetchRandomBeer } from '../actions'
@@ -29,11 +23,8 @@ const RandomBeer = ({ session }) => {
   return (
     <Container>
       {randomBeer.id ? (
-        <Box textAlign="center">
-          <Typography variant="h1">
-            #{randomBeer.id} {randomBeer.name}
-          </Typography>
-          <Button variant="contained" onClick={handleSubmit}>
+        <Box textAlign="center" sx={{ m: 2 }}>
+          <Button variant="contained" color="primary" onClick={handleSubmit}>
             Fetch Another Recipe
           </Button>
         </Box>
