@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux'
 
 import { ThemeProvider } from '@mui/material/styles'
 import { darkTheme, lightTheme } from '../styles/themes'
+import { CssBaseline } from '@mui/material'
 
 import Nav from './Nav'
 import Home from './Home'
@@ -71,26 +72,20 @@ function App() {
 
   return (
     <ThemeProvider theme={settings.dark_mode ? darkTheme : lightTheme}>
-      <div className="container">
-        <Nav session={session} />
-        <ErrorMessage />
-      </div>
-      <div className="container">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/auth" element={<Auth />} />
-          <Route path="/account" element={<Account session={session} />} />
-          <Route
-            path="/favourites"
-            element={<Favourites session={session} />}
-          />
-          <Route path="/search" element={<SearchForm session={session} />} />
-          <Route path="/random" element={<RandomBeer session={session} />} />
-          <Route path="/beer/">
-            <Route path=":id" element={<Beer session={session} />} />
-          </Route>
-        </Routes>
-      </div>
+      <CssBaseline enableColorScheme />
+      <Nav session={session} />
+      <ErrorMessage />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/auth" element={<Auth />} />
+        <Route path="/account" element={<Account session={session} />} />
+        <Route path="/favourites" element={<Favourites session={session} />} />
+        <Route path="/search" element={<SearchForm session={session} />} />
+        <Route path="/random" element={<RandomBeer session={session} />} />
+        <Route path="/beer/">
+          <Route path=":id" element={<Beer session={session} />} />
+        </Route>
+      </Routes>
     </ThemeProvider>
   )
 }

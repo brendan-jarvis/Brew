@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import {
   Button,
   Box,
+  Link,
   Table,
   TableBody,
   TableCell,
@@ -267,15 +268,15 @@ const DisplayBeer = ({ beer, session }) => {
                   )}
                 >
                   <TableCell scope="row">
-                    <a
+                    <Link
+                      color="inherit"
                       href={`https://beermaverick.com/hop/${hop.name
                         .replace('-extract', '')
                         .replace(/\s+/g, '-')
                         .toLowerCase()}/`}
-                      style={{ color: 'black' }}
                     >
                       {hop.name}
-                    </a>
+                    </Link>
                   </TableCell>
                   {settings.ounces ? (
                     <TableCell>

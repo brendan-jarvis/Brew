@@ -13,6 +13,9 @@ export const lightTheme = responsiveFontSizes(
     ...baseTheme,
     palette: {
       mode: 'light',
+      background: {
+        default: '#ffffff',
+      },
     },
   })
 )
@@ -21,6 +24,12 @@ export const darkTheme = responsiveFontSizes(
   createTheme({
     palette: {
       mode: 'dark',
+      background: {
+        default: '#222222',
+      },
+      text: {
+        primary: '#ffffff',
+      },
     },
   })
 )
