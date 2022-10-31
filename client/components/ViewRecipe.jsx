@@ -8,6 +8,7 @@ import {
   Stack,
   Typography,
   TextField,
+  Divider,
 } from '@mui/material'
 
 const ViewRecipe = ({ session }) => {
@@ -34,7 +35,6 @@ const ViewRecipe = ({ session }) => {
       }
 
       if (data) {
-        console.log(data)
         setRecipe(data)
       }
     } catch (error) {
@@ -43,6 +43,8 @@ const ViewRecipe = ({ session }) => {
       setLoading(false)
     }
   }
+
+  const beerjson = recipe?.recipe.beerjson.recipes[0] ?? null
 
   return (
     <Container>
@@ -61,33 +63,41 @@ const ViewRecipe = ({ session }) => {
             Author: {recipe?.author_username}
           </Typography>
           <Typography variant="h3" align="center">
-            Created: {recipe?.inserted_at}
+            Created:{' '}
+            {new Date(recipe?.inserted_at).toLocaleDateString('en-NZ', {
+              timestyle: 'short',
+            })}
           </Typography>
           {recipe?.updated_at != recipe?.inserted_at && (
             <Typography variant="h3" align="center">
               Updated: {recipe?.updated_at}
             </Typography>
           )}
-          <Stack spacing={2}>
-            <Typography variant="body1" align="center">
-              {recipe &&
-                Object.keys(recipe?.recipe.beerjson.recipes[0]).map((key) => (
-                  <>
-                    <Typography variant="body1" align="center">
-                      {key}
-                    </Typography>
-                    <TextField
-                      key={key}
-                      type="text"
-                      label={key}
-                      value={recipe.recipe.beerjson.recipes[0][key]}
-                      fullWidth
-                      multiline
-                    />
-                  </>
-                ))}
-            </Typography>
-          </Stack>
+          <Divider />
+          {recipe && (
+            <Stack spacing={2}>
+              {Object.keys(beerjson).map((key) => (
+                <>
+                  <Typography
+                    key={key + 'title'}
+                    variant="body1"
+                    align="center"
+                  >
+                    {key.charAt(0).toUpperCase() + key.slice(1)}:
+                  </Typography>
+                  <TextField
+                    key={key}
+                    type="text"
+                    name={key}
+                    label={key}
+                    value={JSON.stringify(beerjson[key])}
+                    fullWidth
+                    multiline
+                  />
+                </>
+              ))}
+            </Stack>
+          )}
         </Box>
       )}
     </Container>
