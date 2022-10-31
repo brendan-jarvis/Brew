@@ -9,6 +9,7 @@ import {
   Typography,
   TextField,
   Divider,
+  Paper,
 } from '@mui/material'
 
 const ViewRecipe = ({ session }) => {
@@ -45,6 +46,8 @@ const ViewRecipe = ({ session }) => {
   }
 
   const beerjson = recipe?.recipe.beerjson.recipes[0] ?? null
+  // const { fermentable_additions, hop_additions, culture_additions } =
+  //   recipe.ingredients ?? {}
 
   return (
     <Container>
@@ -60,7 +63,7 @@ const ViewRecipe = ({ session }) => {
             {recipe?.name}
           </Typography>
           <Typography variant="h2" align="center">
-            Author: {recipe?.author_username}
+            Uploaded by: {recipe?.author_username}
           </Typography>
           <Typography variant="h3" align="center">
             Created:{' '}
@@ -75,28 +78,46 @@ const ViewRecipe = ({ session }) => {
           )}
           <Divider />
           {recipe && (
-            <Stack spacing={2}>
-              {Object.keys(beerjson).map((key) => (
-                <>
-                  <Typography
-                    key={key + 'title'}
-                    variant="body1"
-                    align="center"
-                  >
-                    {key.charAt(0).toUpperCase() + key.slice(1)}:
+            <>
+              <Paper>
+                <Stack spacing={2}>
+                  <Typography>
+                    <strong>Style:</strong> {beerjson?.style?.name}
                   </Typography>
-                  <TextField
-                    key={key}
-                    type="text"
-                    name={key}
-                    label={key}
-                    value={JSON.stringify(beerjson[key])}
-                    fullWidth
-                    multiline
-                  />
-                </>
-              ))}
-            </Stack>
+                  {beerjson.ingredients.fermentable_additions.map(
+                    (ferm, idx) => (
+                      <Typography key={ferm + idx} variant="body1">
+                        <strong>{ferm.type}:</strong> {ferm.name}
+                      </Typography>
+                    )
+                  )}
+                </Stack>
+              </Paper>
+              <Paper>
+                <Stack spacing={2}>
+                  {Object.keys(beerjson).map((key, idx) => (
+                    <>
+                      <Typography
+                        key={key + idx}
+                        variant="body1"
+                        align="center"
+                      >
+                        {key.charAt(0).toUpperCase() + key.slice(1)}:
+                      </Typography>
+                      <TextField
+                        key={key + idx}
+                        type="text"
+                        name={key}
+                        label={key}
+                        value={JSON.stringify(beerjson[key], null, 2)}
+                        fullWidth
+                        multiline
+                      />
+                    </>
+                  ))}
+                </Stack>
+              </Paper>
+            </>
           )}
         </Box>
       )}
