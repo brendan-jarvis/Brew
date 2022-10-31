@@ -7,13 +7,14 @@ import { ThemeProvider } from '@mui/material/styles'
 import { darkTheme, lightTheme } from '../styles/themes'
 import { CssBaseline } from '@mui/material'
 
-import Nav from './Nav'
-import Home from './Home'
-import Favourites from './Favourites'
-import SearchForm from './SearchForm'
-import ErrorMessage from './ErrorMessage'
-import RandomBeer from './RandomBeer'
 import Beer from './Beer'
+import ErrorMessage from './ErrorMessage'
+import Favourites from './Favourites'
+import Home from './Home'
+import Nav from './Nav'
+import RandomBeer from './RandomBeer'
+import SearchForm from './SearchForm'
+import ViewRecipe from './ViewRecipe'
 
 // Supabase components
 import Auth from './Auth'
@@ -90,6 +91,9 @@ function App() {
         <Route path="/random" element={<RandomBeer session={session} />} />
         <Route path="/beer/">
           <Route path=":id" element={<Beer session={session} />} />
+        </Route>
+        <Route path="/recipes/">
+          <Route path=":id" element={<ViewRecipe session={session} />} />
         </Route>
       </Routes>
     </ThemeProvider>
