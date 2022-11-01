@@ -41,6 +41,7 @@
     "@mui/material": "^5.10.5",
     "@supabase/supabase-js": "^2.0.4",
     "bootstrap": "^5.2.1",
+    "brewcalc": "^0.1.6",
     "dotenv": "^16.0.3",
     "dotenv-webpack": "^8.0.1",
     "express": "^4.17.2",

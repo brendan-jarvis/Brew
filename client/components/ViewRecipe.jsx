@@ -49,6 +49,8 @@ const ViewRecipe = ({ session }) => {
   // const { fermentable_additions, hop_additions, culture_additions } =
   //   recipe.ingredients ?? {}
 
+  console.log(beerjson)
+
   return (
     <Container>
       {loading ? (
@@ -81,12 +83,16 @@ const ViewRecipe = ({ session }) => {
             <>
               <Paper>
                 <Stack spacing={2}>
-                  <Typography>
+                  <Typography style={{ textTransform: 'capitalize' }}>
                     <strong>Style:</strong> {beerjson?.style?.name}
                   </Typography>
                   {beerjson.ingredients.fermentable_additions.map(
                     (ferm, idx) => (
-                      <Typography key={ferm + idx} variant="body1">
+                      <Typography
+                        key={ferm + idx}
+                        variant="body1"
+                        style={{ textTransform: 'capitalize' }}
+                      >
                         <strong>{ferm.type}:</strong> {ferm.name}
                       </Typography>
                     )
@@ -101,8 +107,9 @@ const ViewRecipe = ({ session }) => {
                         key={key + idx}
                         variant="body1"
                         align="center"
+                        style={{ textTransform: 'capitalize' }}
                       >
-                        {key.charAt(0).toUpperCase() + key.slice(1)}:
+                        {key}:
                       </Typography>
                       <TextField
                         key={key + idx}
