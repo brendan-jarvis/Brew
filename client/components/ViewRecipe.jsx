@@ -319,6 +319,45 @@ const ViewRecipe = ({ session }) => {
               ))}
             </TableBody>
           </Table>
+
+          <Divider />
+
+          <Typography variant="h2">Yeast</Typography>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Name</TableCell>
+                <TableCell>Form</TableCell>
+                <TableCell>Amount</TableCell>
+                <TableCell>Type</TableCell>
+                <TableCell>Producer</TableCell>
+                {/* TODO: Add attenuation
+                
+                <TableCell>Attenuation</TableCell> */}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {beerjson?.ingredients.culture_additions.map((culture) => (
+                <TableRow key={culture.name}>
+                  <TableCell style={{ textTransform: 'capitalize' }}>
+                    {culture.name}
+                  </TableCell>
+                  <TableCell style={{ textTransform: 'capitalize' }}>
+                    {culture.form}
+                  </TableCell>
+                  <TableCell>
+                    {culture.amount.value} {culture.amount.unit}
+                  </TableCell>
+                  <TableCell style={{ textTransform: 'capitalize' }}>
+                    {culture.type}
+                  </TableCell>
+                  <TableCell style={{ textTransform: 'capitalize' }}>
+                    {culture.producer}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </Box>
       )}
     </Container>
