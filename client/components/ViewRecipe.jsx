@@ -69,11 +69,13 @@ const ViewRecipe = ({ session }) => {
           </LinearProgress>
         </Box>
       ) : (
-        <Box textAlign="center">
+        <>
           <Typography variant="h1">{recipe?.name}</Typography>
-          <Card sx={{ maxWidth: 500 }}>
-            <CardContent style={{ textAlign: 'left' }}>
-              <Typography variant="h2">Recipe Stats</Typography>
+          <Box textAlign="center">
+            <Paper sx={{ textAlign: 'left' }}>
+              <Typography variant="h2" sx={{ textAlign: 'center' }}>
+                Recipe Stats
+              </Typography>
               <Typography variant="body1">
                 <Box component="span" fontWeight="bold">
                   Brewer:
@@ -102,7 +104,6 @@ const ViewRecipe = ({ session }) => {
                   beerjson?.style.category_number +
                   beerjson?.style.style_letter}
               </Typography>
-
               <Typography variant="body1">
                 <Box component="span" fontWeight="bold">
                   Boil Time:
@@ -167,198 +168,256 @@ const ViewRecipe = ({ session }) => {
                       timestyle: 'short',
                     })}
               </Typography>
-            </CardContent>
-          </Card>
+            </Paper>
 
-          <Divider />
+            <Divider />
 
-          <Typography variant="h2">Fermentables</Typography>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Amount</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Producer</TableCell>
-                <TableCell>Type</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {beerjson?.ingredients.fermentable_additions.map(
-                (fermentable) => (
-                  <TableRow key={fermentable.name}>
+            <Typography variant="h2">Fermentables</Typography>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Amount</TableCell>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Producer</TableCell>
+                  <TableCell>Type</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {beerjson?.ingredients.fermentable_additions.map(
+                  (fermentable) => (
+                    <TableRow key={fermentable.name}>
+                      <TableCell>
+                        {fermentable.amount.unit === 'g'
+                          ? fermentable.amount.value / 1000 + ' kg'
+                          : fermentable.amount.value +
+                            ' ' +
+                            fermentable.amount.unit}
+                      </TableCell>
+                      <TableCell style={{ textTransform: 'capitalize' }}>
+                        {fermentable.name}
+                      </TableCell>
+                      <TableCell style={{ textTransform: 'capitalize' }}>
+                        {fermentable.producer}
+                      </TableCell>
+                      <TableCell style={{ textTransform: 'capitalize' }}>
+                        {fermentable.type}
+                      </TableCell>
+                    </TableRow>
+                  )
+                )}
+              </TableBody>
+            </Table>
+
+            <Divider />
+
+            <Typography variant="h2">Hops</Typography>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Amount</TableCell>
+                  <TableCell>Variety</TableCell>
+                  <TableCell>Form</TableCell>
+                  <TableCell>Alpha Acid</TableCell>
+                  <TableCell>Use</TableCell>
+                  <TableCell>Time</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {beerjson?.ingredients.hop_additions.map((hop) => (
+                  <TableRow key={hop.name + hop.timing.duration.value}>
                     <TableCell>
-                      {fermentable.amount.unit === 'g'
-                        ? fermentable.amount.value / 1000 + ' kg'
-                        : fermentable.amount.value +
-                          ' ' +
-                          fermentable.amount.unit}
+                      {hop.amount.value} {hop.amount.unit}
                     </TableCell>
                     <TableCell style={{ textTransform: 'capitalize' }}>
-                      {fermentable.name}
+                      {hop.name}
                     </TableCell>
                     <TableCell style={{ textTransform: 'capitalize' }}>
-                      {fermentable.producer}
+                      {hop.form}
+                    </TableCell>
+                    <TableCell>
+                      {hop.alpha_acid.value} {hop.alpha_acid.unit}
                     </TableCell>
                     <TableCell style={{ textTransform: 'capitalize' }}>
-                      {fermentable.type}
+                      {hop.timing.use.replaceAll('_', ' ')}
+                    </TableCell>
+                    <TableCell>
+                      {hop.timing.duration.value} {hop.timing.duration.unit}
                     </TableCell>
                   </TableRow>
-                )
-              )}
-            </TableBody>
-          </Table>
+                ))}
+              </TableBody>
+            </Table>
 
-          <Divider />
+            <Divider />
 
-          <Typography variant="h2">Hops</Typography>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Amount</TableCell>
-                <TableCell>Variety</TableCell>
-                <TableCell>Form</TableCell>
-                <TableCell>Alpha Acid</TableCell>
-                <TableCell>Use</TableCell>
-                <TableCell>Time</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {beerjson?.ingredients.hop_additions.map((hop) => (
-                <TableRow key={hop.name + hop.timing.duration.value}>
-                  <TableCell>
-                    {hop.amount.value} {hop.amount.unit}
-                  </TableCell>
+            <Typography variant="h2">Mash Steps</Typography>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Amount</TableCell>
                   <TableCell style={{ textTransform: 'capitalize' }}>
-                    {hop.name}
+                    Type
                   </TableCell>
-                  <TableCell style={{ textTransform: 'capitalize' }}>
-                    {hop.form}
-                  </TableCell>
-                  <TableCell>
-                    {hop.alpha_acid.value} {hop.alpha_acid.unit}
-                  </TableCell>
-                  <TableCell style={{ textTransform: 'capitalize' }}>
-                    {hop.timing.use.replaceAll('_', ' ')}
-                  </TableCell>
-                  <TableCell>
-                    {hop.timing.duration.value} {hop.timing.duration.unit}
-                  </TableCell>
+                  <TableCell>Temperature</TableCell>
+                  <TableCell>Time</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHead>
+              <TableBody>
+                {beerjson?.mash.mash_steps.map((step) => (
+                  <TableRow key={step.type + step.step_time.value}>
+                    <TableCell style={{ textTransform: 'capitalize' }}>
+                      {step.amount.value} {step.amount.unit}
+                    </TableCell>
+                    <TableCell style={{ textTransform: 'capitalize' }}>
+                      {step.type}
+                    </TableCell>
+                    <TableCell>
+                      {step.step_temperature.value} {step.step_temperature.unit}
+                    </TableCell>
+                    <TableCell>
+                      {step.step_time.value} {step.step_time.unit}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
 
-          <Divider />
+            <Divider />
 
-          <Typography variant="h2">Mash Steps</Typography>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Amount</TableCell>
-                <TableCell style={{ textTransform: 'capitalize' }}>
-                  Type
-                </TableCell>
-                <TableCell>Temperature</TableCell>
-                <TableCell>Time</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {beerjson?.mash.mash_steps.map((step) => (
-                <TableRow key={step.type + step.step_time.value}>
+            <Typography variant="h2">Miscellaneous Additions</Typography>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Amount</TableCell>
+                  <TableCell>Name</TableCell>
                   <TableCell style={{ textTransform: 'capitalize' }}>
-                    {step.amount.value} {step.amount.unit}
+                    Type
                   </TableCell>
-                  <TableCell style={{ textTransform: 'capitalize' }}>
-                    {step.type}
-                  </TableCell>
-                  <TableCell>
-                    {step.step_temperature.value} {step.step_temperature.unit}
-                  </TableCell>
-                  <TableCell>
-                    {step.step_time.value} {step.step_time.unit}
-                  </TableCell>
+                  <TableCell>Use</TableCell>
+                  <TableCell>Time</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHead>
+              <TableBody>
+                {beerjson?.ingredients.miscellaneous_additions.map((step) => (
+                  <TableRow key={step.name + step.timing.duration.value}>
+                    <TableCell>
+                      {step.amount.value} {step.amount.unit}
+                    </TableCell>
+                    <TableCell style={{ textTransform: 'capitalize' }}>
+                      {step.name}
+                    </TableCell>
+                    <TableCell style={{ textTransform: 'capitalize' }}>
+                      {step.type}
+                    </TableCell>
+                    <TableCell style={{ textTransform: 'capitalize' }}>
+                      {step.timing.use.replaceAll('_', ' ')}
+                    </TableCell>
+                    <TableCell>
+                      {step.timing.duration.value} {step.timing.duration.unit}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
 
-          <Divider />
+            <Divider />
 
-          <Typography variant="h2">Miscellaneous Additions</Typography>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Amount</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell style={{ textTransform: 'capitalize' }}>
-                  Type
-                </TableCell>
-                <TableCell>Use</TableCell>
-                <TableCell>Time</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {beerjson?.ingredients.miscellaneous_additions.map((step) => (
-                <TableRow key={step.name + step.timing.duration.value}>
-                  <TableCell>
-                    {step.amount.value} {step.amount.unit}
-                  </TableCell>
-                  <TableCell style={{ textTransform: 'capitalize' }}>
-                    {step.name}
-                  </TableCell>
-                  <TableCell style={{ textTransform: 'capitalize' }}>
-                    {step.type}
-                  </TableCell>
-                  <TableCell style={{ textTransform: 'capitalize' }}>
-                    {step.timing.use.replaceAll('_', ' ')}
-                  </TableCell>
-                  <TableCell>
-                    {step.timing.duration.value} {step.timing.duration.unit}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-
-          <Divider />
-
-          <Typography variant="h2">Yeast</Typography>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell>Form</TableCell>
-                <TableCell>Amount</TableCell>
-                <TableCell>Type</TableCell>
-                <TableCell>Producer</TableCell>
-                {/* TODO: Add attenuation
+            <Typography variant="h2">Yeast</Typography>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Form</TableCell>
+                  <TableCell>Amount</TableCell>
+                  <TableCell>Type</TableCell>
+                  <TableCell>Producer</TableCell>
+                  {/* TODO: Add attenuation
                 
                 <TableCell>Attenuation</TableCell> */}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {beerjson?.ingredients.culture_additions.map((culture) => (
-                <TableRow key={culture.name}>
-                  <TableCell style={{ textTransform: 'capitalize' }}>
-                    {culture.name}
-                  </TableCell>
-                  <TableCell style={{ textTransform: 'capitalize' }}>
-                    {culture.form}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {beerjson?.ingredients.culture_additions.map((culture) => (
+                  <TableRow key={culture.name}>
+                    <TableCell style={{ textTransform: 'capitalize' }}>
+                      {culture.name}
+                    </TableCell>
+                    <TableCell style={{ textTransform: 'capitalize' }}>
+                      {culture.form}
+                    </TableCell>
+                    <TableCell>
+                      {culture.amount.value} {culture.amount.unit}
+                    </TableCell>
+                    <TableCell style={{ textTransform: 'capitalize' }}>
+                      {culture.type}
+                    </TableCell>
+                    <TableCell style={{ textTransform: 'capitalize' }}>
+                      {culture.producer}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+
+            <Divider />
+
+            <Typography variant="h2">Water Profile</Typography>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Name</TableCell>
+                  <TableCell>
+                    Calcium Ca<sup>+2</sup>
                   </TableCell>
                   <TableCell>
-                    {culture.amount.value} {culture.amount.unit}
+                    Magnesium Mg<sup>+2</sup>
                   </TableCell>
-                  <TableCell style={{ textTransform: 'capitalize' }}>
-                    {culture.type}
+                  <TableCell>
+                    Sodium Na<sup>+</sup>
                   </TableCell>
-                  <TableCell style={{ textTransform: 'capitalize' }}>
-                    {culture.producer}
+                  <TableCell>
+                    Chloride Cl<sup>-</sup>
+                  </TableCell>
+                  <TableCell>
+                    Sulfate SO<sub>4</sub>
+                    <sup>-2</sup>
+                  </TableCell>
+                  <TableCell>
+                    Bicarbonate HCO<sub>3</sub>
+                    <sup>-</sup>
                   </TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Box>
+              </TableHead>
+              <TableBody>
+                {beerjson?.ingredients.water_additions.map((water) => (
+                  <TableRow key={water.name}>
+                    <TableCell style={{ textTransform: 'capitalize' }}>
+                      {water.name}
+                    </TableCell>
+                    <TableCell>
+                      {water.calcium.value} {water.calcium.unit}
+                    </TableCell>
+                    <TableCell>
+                      {water.magnesium.value} {water.magnesium.unit}
+                    </TableCell>
+                    <TableCell>
+                      {water.sodium.value} {water.sodium.unit}
+                    </TableCell>
+                    <TableCell>
+                      {water.chloride.value} {water.chloride.unit}
+                    </TableCell>
+                    <TableCell>
+                      {water.sulfate.value} {water.sulfate.unit}
+                    </TableCell>
+                    <TableCell>
+                      {water.bicarbonate.value} {water.bicarbonate.unit}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </Box>
+        </>
       )}
     </Container>
   )
