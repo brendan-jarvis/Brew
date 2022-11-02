@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, NavLink } from 'react-router-dom'
 import { supabase } from '../utils/supabase'
 import {
+  Alert,
   Box,
-  Card,
-  CardContent,
   LinearProgress,
   Container,
-  Stack,
   Typography,
-  TextField,
   Divider,
   Paper,
   Table,
@@ -17,7 +14,6 @@ import {
   TableBody,
   TableCell,
   TableRow,
-  Tooltip,
 } from '@mui/material'
 import { calcCalories } from 'brewcalc'
 
@@ -25,6 +21,7 @@ const ViewRecipe = ({ session }) => {
   const { id } = useParams()
   const [loading, setLoading] = useState(false)
   const [recipe, setRecipe] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     getRecipe()
@@ -41,6 +38,11 @@ const ViewRecipe = ({ session }) => {
         .single()
 
       if (error) {
+        if (session.user) {
+          setErrorMessage(error.message)
+        } else {
+          setErrorMessage('You must be logged in to view this recipe')
+        }
         throw error
       }
 
@@ -55,14 +57,17 @@ const ViewRecipe = ({ session }) => {
   }
 
   const beerjson = recipe?.recipe.beerjson.recipes[0] ?? null
-  // const { fermentable_additions, hop_additions, culture_additions } =
-  //   recipe.ingredients ?? {}
-
-  console.log(beerjson)
 
   return (
     <Container>
-      {loading ? (
+      {errorMessage ? (
+        <>
+          <Alert severity="error">{errorMessage}</Alert>
+          <Typography variant="h2" textAlign="center">
+            Sorry, we couldn&apos;t find that recipe!
+          </Typography>
+        </>
+      ) : loading ? (
         <Box textAlign="center">
           <LinearProgress color="secondary">
             <span className="visually-hidden">Loading...</span>
@@ -70,11 +75,36 @@ const ViewRecipe = ({ session }) => {
         </Box>
       ) : (
         <>
-          <Typography variant="h1">{recipe?.name}</Typography>
+          <Typography variant="h1" textAlign="center">
+            {recipe?.name}
+          </Typography>
+
+          {recipe?.updated_at != recipe?.inserted_at ? (
+            <Typography variant="subtitle1" textAlign="center">
+              Uploaded by{' '}
+              <NavLink to={`/profiles/${recipe?.author_username}`}>
+                {recipe?.author_username}
+              </NavLink>{' '}
+              on {new Date(recipe?.updated_at).toDateString()}`
+            </Typography>
+          ) : (
+            <>
+              <Typography variant="subtitle1" textAlign="center">
+                Uploaded by{' '}
+                <NavLink to={`/profiles/${recipe?.author_username}`}>
+                  {recipe?.author_username}
+                </NavLink>{' '}
+                on {new Date(recipe?.updated_at).toDateString()}.
+              </Typography>
+              <Typography variant="subtitle1" textAlign="center">
+                Last updated on {new Date(recipe?.inserted_at).toDateString()}.
+              </Typography>
+            </>
+          )}
           <Box textAlign="center">
             <Paper sx={{ textAlign: 'left' }}>
               <Typography variant="h2" sx={{ textAlign: 'center' }}>
-                Recipe Stats
+                Stats
               </Typography>
               <Typography variant="body1">
                 <Box component="span" fontWeight="bold">
@@ -156,17 +186,6 @@ const ViewRecipe = ({ session }) => {
                   )
                 )}{' '}
                 calories
-              </Typography>
-              <Divider />
-              <Typography variant="subtitle1">
-                Uploaded by: {recipe?.author_username} on{' '}
-                {recipe?.updated_at != recipe?.inserted_at
-                  ? new Date(recipe?.updated_at).toLocaleString('en-NZ', {
-                      timestyle: 'short',
-                    })
-                  : new Date(recipe?.inserted_at).toLocaleDateString('en-NZ', {
-                      timestyle: 'short',
-                    })}
               </Typography>
             </Paper>
 
@@ -412,6 +431,29 @@ const ViewRecipe = ({ session }) => {
                     <TableCell>
                       {water.bicarbonate.value} {water.bicarbonate.unit}
                     </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+
+            <Divider />
+
+            <Typography variant="h2">Fermentation</Typography>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Start Temperature</TableCell>
+                  <TableCell>Free rise</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {beerjson?.fermentation.fermentation_steps.map((step) => (
+                  <TableRow key={step.start_temperature.value}>
+                    <TableCell style={{ textTransform: 'capitalize' }}>
+                      {step.start_temperature.value}{' '}
+                      {step.start_temperature.unit}
+                    </TableCell>
+                    <TableCell>{step.free_rise ? 'Yes' : 'No'}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
