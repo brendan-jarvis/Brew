@@ -21,10 +21,10 @@ const Recipes = ({ session }) => {
   const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
-    getRecipe()
+    getRecipes()
   }, [id])
 
-  const getRecipe = async () => {
+  const getRecipes = async () => {
     try {
       setLoading(true)
 

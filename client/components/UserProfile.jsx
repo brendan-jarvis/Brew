@@ -15,22 +15,26 @@ import {
 } from '@mui/material'
 
 const UserProfile = ({ session }) => {
-  const { id } = useParams()
+  const { username } = useParams()
   const [loading, setLoading] = useState(false)
   const [profile, setProfile] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
-    getRecipe()
-  }, [id])
+    getProfile()
+  }, [username])
 
-  const getRecipe = async () => {
+  const getProfile = async () => {
     try {
       setLoading(true)
 
       const { data, error } = await supabase
         .from('profiles')
-        .select('id, avatar_url, username, website, recipes (user_id)')
+        .select(
+          'username, avatar_url, website, recipes(id, name, inserted_at, updated_at)'
+        )
+        .eq('username)', username)
+        .single()
 
       if (error) {
         if (session.user) {

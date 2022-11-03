@@ -100,7 +100,7 @@ function App() {
         </Route>
         <Route path="/profiles/">
           <Route index element={<h1>Profiles would go here</h1>} />
-          <Route path=":id" element={<UserProfile session={session} />} />
+          <Route path=":username" element={<UserProfile session={session} />} />
         </Route>
       </Routes>
     </ThemeProvider>
