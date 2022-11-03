@@ -14,10 +14,10 @@ import {
   TableRow,
 } from '@mui/material'
 
-const Recipes = ({ session }) => {
+const UserProfile = ({ session }) => {
   const { id } = useParams()
   const [loading, setLoading] = useState(false)
-  const [recipes, setRecipes] = useState(null)
+  const [profile, setProfile] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
@@ -29,8 +29,8 @@ const Recipes = ({ session }) => {
       setLoading(true)
 
       const { data, error } = await supabase
-        .from('recipes')
-        .select('id, name, author_username, inserted_at, updated_at')
+        .from('profiles')
+        .select('id, avatar_url, username, website, recipes (user_id)')
 
       if (error) {
         if (session.user) {
@@ -42,7 +42,7 @@ const Recipes = ({ session }) => {
       }
 
       if (data) {
-        setRecipes(data)
+        setProfile(data)
       }
     } catch (error) {
       console.log(error.message)
@@ -57,7 +57,7 @@ const Recipes = ({ session }) => {
         <>
           <Alert severity="error">{errorMessage}</Alert>
           <Typography variant="h2" textAlign="center">
-            Sorry, we couldn&apos;t load the recipes!
+            Sorry, we couldn&apos;t load the profile!
           </Typography>
         </>
       ) : loading ? (
@@ -69,28 +69,34 @@ const Recipes = ({ session }) => {
       ) : (
         <>
           <Typography variant="h1" textAlign="center">
-            Recipes
+            {profile?.username}
+          </Typography>
+          <Typography variant="body1" textAlign="center">
+            Website: {profile?.website}
+          </Typography>
+          {profile?.avatar_url && (
+            <img
+              src={profile.avatar_url}
+              alt={`${profile?.username}'s avatar'`}
+            />
+          )}
+          <Typography variant="h2" textAlign="center">
+            User Recipes
           </Typography>
           <Table>
             <TableHead>
               <TableRow>
                 <TableCell>Name</TableCell>
-                <TableCell>Uploaded By</TableCell>
                 <TableCell>Added On</TableCell>
                 <TableCell>Updated On</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {recipes?.map((recipe) => (
+              {profile?.recipes?.map((recipe) => (
                 <TableRow key={recipe?.name}>
                   <TableCell>
                     <NavLink to={`/recipes/${recipe?.id}`}>
                       {recipe?.name}
-                    </NavLink>
-                  </TableCell>
-                  <TableCell style={{ textTransform: 'capitalize' }}>
-                    <NavLink to={`/profiles/${recipe?.author_username}`}>
-                      {recipe?.author_username}
                     </NavLink>
                   </TableCell>
                   <TableCell style={{ textTransform: 'capitalize' }}>
@@ -109,4 +115,4 @@ const Recipes = ({ session }) => {
   )
 }
 
-export default Recipes
+export default UserProfile
