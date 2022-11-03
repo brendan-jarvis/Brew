@@ -21,6 +21,7 @@ import {
 } from '@mui/material'
 
 import {
+  Article,
   Science,
   Menu as MenuIcon,
   Login,
@@ -33,6 +34,7 @@ const pages = [
   { text: 'Favourites', icon: Favorite },
   { text: 'Search', icon: Search },
   { text: 'Random', icon: Shuffle },
+  { text: 'Recipes', icon: Article },
 ]
 
 const Nav = ({ session }) => {
