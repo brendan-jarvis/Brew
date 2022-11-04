@@ -69,7 +69,7 @@ const ViewRecipe = ({ session }) => {
         </>
       ) : loading ? (
         <Box textAlign="center">
-          <LinearProgress color="secondary">
+          <LinearProgress color="secondary" sx={{ mt: -1 }}>
             <span className="visually-hidden">Loading...</span>
           </LinearProgress>
         </Box>

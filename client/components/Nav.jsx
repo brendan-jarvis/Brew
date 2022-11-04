@@ -69,7 +69,7 @@ const Nav = ({ session }) => {
   const [open, setOpen] = useState(false)
 
   return (
-    <AppBar position="static" enableColorOnDark>
+    <AppBar position="static" enableColorOnDark sx={{ mb: 1 }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Science sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />

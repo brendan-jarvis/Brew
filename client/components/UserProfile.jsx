@@ -4,7 +4,11 @@ import { supabase } from '../utils/supabase'
 import {
   Alert,
   Box,
+  Card,
+  CardContent,
+  CardMedia,
   LinearProgress,
+  Link,
   Container,
   Typography,
   Table,
@@ -40,7 +44,7 @@ const UserProfile = ({ session }) => {
         if (session.user) {
           setErrorMessage(error.message)
         } else {
-          setErrorMessage('User not found!')
+          setErrorMessage('User profile not found!')
         }
         throw error
       }
@@ -66,26 +70,39 @@ const UserProfile = ({ session }) => {
         </>
       ) : loading ? (
         <Box textAlign="center">
-          <LinearProgress color="secondary">
+          <LinearProgress color="secondary" sx={{ mt: -1 }}>
             <span className="visually-hidden">Loading...</span>
           </LinearProgress>
         </Box>
       ) : (
         <>
-          <Typography variant="h1" textAlign="center">
-            {profile?.username}
-          </Typography>
-          {profile?.website && (
-            <Typography variant="h3" textAlign="center">
-              Website: {profile?.website}
-            </Typography>
-          )}
-          {profile?.avatar_url && (
-            <img
-              src={profile.avatar_url}
-              alt={`${profile?.username}'s avatar'`}
-            />
-          )}
+          <Card sx={{ mb: 1 }}>
+            <CardContent>
+              <Typography variant="h3" gutterBottom textAlign="center">
+                {profile?.username}
+              </Typography>
+              {profile?.avatar_url && (
+                <CardMedia
+                  component="img"
+                  style={{ width: '25vw', height: 'auto', margin: '0 auto' }}
+                  image={profile.avatar_url}
+                  alt={`${profile?.username}'s avatar'`}
+                />
+              )}
+              {profile?.website && (
+                <Typography variant="h4" textAlign="left">
+                  Website:{' '}
+                  <Link
+                    href={profile?.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {profile?.website}
+                  </Link>
+                </Typography>
+              )}
+            </CardContent>
+          </Card>
           {profile?.recipes ? (
             <>
               <Typography variant="h3" textAlign="center">
