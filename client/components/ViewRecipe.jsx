@@ -102,7 +102,7 @@ const ViewRecipe = ({ session }) => {
             </>
           )}
           <Box textAlign="center">
-            <Paper sx={{ textAlign: 'left' }}>
+            <Paper sx={{ textAlign: 'left', p: 1 }}>
               <Typography variant="h2" sx={{ textAlign: 'center' }}>
                 Stats
               </Typography>
