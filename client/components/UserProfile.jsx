@@ -40,7 +40,7 @@ const UserProfile = ({ session }) => {
         if (session.user) {
           setErrorMessage(error.message)
         } else {
-          setErrorMessage('You must be logged in to view recipes')
+          setErrorMessage('User not found!')
         }
         throw error
       }
@@ -61,7 +61,7 @@ const UserProfile = ({ session }) => {
         <>
           <Alert severity="error">{errorMessage}</Alert>
           <Typography variant="h2" textAlign="center">
-            Sorry, we couldn&apos;t load the profile!
+            Sorry, we couldn&apos;t load a profile for {username}!
           </Typography>
         </>
       ) : loading ? (
@@ -75,44 +75,54 @@ const UserProfile = ({ session }) => {
           <Typography variant="h1" textAlign="center">
             {profile?.username}
           </Typography>
-          <Typography variant="body1" textAlign="center">
-            Website: {profile?.website}
-          </Typography>
+          {profile?.website && (
+            <Typography variant="h3" textAlign="center">
+              Website: {profile?.website}
+            </Typography>
+          )}
           {profile?.avatar_url && (
             <img
               src={profile.avatar_url}
               alt={`${profile?.username}'s avatar'`}
             />
           )}
-          <Typography variant="h2" textAlign="center">
-            User Recipes
-          </Typography>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell>Added On</TableCell>
-                <TableCell>Updated On</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {profile?.recipes?.map((recipe) => (
-                <TableRow key={recipe?.name}>
-                  <TableCell>
-                    <NavLink to={`/recipes/${recipe?.id}`}>
-                      {recipe?.name}
-                    </NavLink>
-                  </TableCell>
-                  <TableCell style={{ textTransform: 'capitalize' }}>
-                    {new Date(recipe?.inserted_at).toDateString()}
-                  </TableCell>
-                  <TableCell style={{ textTransform: 'capitalize' }}>
-                    {new Date(recipe?.updated_at).toDateString()}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+          {profile?.recipes ? (
+            <>
+              <Typography variant="h3" textAlign="center">
+                User Recipes
+              </Typography>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Name</TableCell>
+                    <TableCell>Added On</TableCell>
+                    <TableCell>Updated On</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {profile?.recipes?.map((recipe) => (
+                    <TableRow key={recipe?.name}>
+                      <TableCell>
+                        <NavLink to={`/recipes/${recipe?.id}`}>
+                          {recipe?.name}
+                        </NavLink>
+                      </TableCell>
+                      <TableCell style={{ textTransform: 'capitalize' }}>
+                        {new Date(recipe?.inserted_at).toDateString()}
+                      </TableCell>
+                      <TableCell style={{ textTransform: 'capitalize' }}>
+                        {new Date(recipe?.updated_at).toDateString()}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </>
+          ) : (
+            <Typography variant="body1" textAlign="center">
+              This user has not uploaded any recipes yet!
+            </Typography>
+          )}
         </>
       )}
     </Container>
