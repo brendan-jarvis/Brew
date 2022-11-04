@@ -7,13 +7,16 @@ import { ThemeProvider } from '@mui/material/styles'
 import { darkTheme, lightTheme } from '../styles/themes'
 import { CssBaseline } from '@mui/material'
 
-import Nav from './Nav'
-import Home from './Home'
-import Favourites from './Favourites'
-import SearchForm from './SearchForm'
-import ErrorMessage from './ErrorMessage'
-import RandomBeer from './RandomBeer'
 import Beer from './Beer'
+import ErrorMessage from './ErrorMessage'
+import Favourites from './Favourites'
+import Home from './Home'
+import Nav from './Nav'
+import RandomBeer from './RandomBeer'
+import SearchForm from './SearchForm'
+import Recipes from './Recipes'
+import ViewRecipe from './ViewRecipe'
+import UserProfile from './UserProfile'
 
 // Supabase components
 import Auth from './Auth'
@@ -90,6 +93,14 @@ function App() {
         <Route path="/random" element={<RandomBeer session={session} />} />
         <Route path="/beer/">
           <Route path=":id" element={<Beer session={session} />} />
+        </Route>
+        <Route path="/recipes/">
+          <Route index element={<Recipes session={session} />} />
+          <Route path=":id" element={<ViewRecipe session={session} />} />
+        </Route>
+        <Route path="/profiles/">
+          <Route index element={<h1>Profiles would go here</h1>} />
+          <Route path=":username" element={<UserProfile session={session} />} />
         </Route>
       </Routes>
     </ThemeProvider>
