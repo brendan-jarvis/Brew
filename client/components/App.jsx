@@ -16,6 +16,7 @@ import RandomBeer from './RandomBeer'
 import SearchForm from './SearchForm'
 import Recipes from './Recipes'
 import ViewRecipe from './ViewRecipe'
+import AddRecipe from './AddRecipe'
 import UserProfile from './UserProfile'
 
 // Supabase components
@@ -97,6 +98,7 @@ function App() {
         <Route path="/recipes/">
           <Route index element={<Recipes session={session} />} />
           <Route path=":id" element={<ViewRecipe session={session} />} />
+          <Route path="add" element={<AddRecipe session={session} />} />
         </Route>
         <Route path="/profiles/">
           <Route index element={<h1>Profiles would go here</h1>} />
