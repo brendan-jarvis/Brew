@@ -14,8 +14,8 @@ const AddRecipe = ({ session }) => {
   const [loading, setLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState(null)
   const [username, setUsername] = useState('')
-  const inputRef = useRef('')
-  const nameRef = useRef('')
+  const inputRef = useRef(null)
+  const nameRef = useRef(null)
 
   useEffect(() => {
     getProfile()
@@ -52,15 +52,18 @@ const AddRecipe = ({ session }) => {
       setLoading(true)
       setErrorMessage(null)
 
+      console.log(inputRef.current.value)
+      console.log(nameRef.current.value)
+
       const { data, error } = await supabase
         .from('recipes')
         .insert([
           {
             user_id: session.user.id,
-            username: username,
-            name: nameRef.current,
+            author_username: username,
+            name: nameRef.current.value,
             inserted_at: new Date(),
-            recipe: inputRef.current,
+            recipe: inputRef.current.value,
           },
         ])
         .single()
@@ -93,7 +96,7 @@ const AddRecipe = ({ session }) => {
         variant="outlined"
         fullWidth
         sx={{ mb: 2 }}
-        ref={nameRef}
+        inputRef={nameRef}
       />
       <TextField
         label="BeerJSON"
@@ -102,7 +105,7 @@ const AddRecipe = ({ session }) => {
         fullWidth
         maxRows={6}
         sx={{ mb: 2 }}
-        ref={inputRef}
+        inputRef={inputRef}
       />
       <Button variant="contained" onClick={handleAddRecipe}>
         Upload Recipe
