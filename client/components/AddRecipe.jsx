@@ -52,9 +52,6 @@ const AddRecipe = ({ session }) => {
       setLoading(true)
       setErrorMessage(null)
 
-      console.log(inputRef.current.value)
-      console.log(nameRef.current.value)
-
       const { data, error } = await supabase
         .from('recipes')
         .insert([
@@ -63,7 +60,7 @@ const AddRecipe = ({ session }) => {
             author_username: username,
             name: nameRef.current.value,
             inserted_at: new Date(),
-            recipe: inputRef.current.value,
+            recipe: JSON.parse(inputRef.current.value),
           },
         ])
         .single()

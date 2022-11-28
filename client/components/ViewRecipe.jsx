@@ -176,21 +176,20 @@ const ViewRecipe = ({ session }) => {
                 {beerjson?.notes}
               </Typography>
 
-              {beerjson?.final_gravity &&
-                beerjson?.original_gravity(
-                  <Typography variant="body1">
-                    <Box component="span" fontWeight="bold">
-                      Calories:
-                    </Box>{' '}
-                    {Math.round(
-                      calcCalories(
-                        beerjson?.original_gravity.value,
-                        beerjson?.final_gravity?.value
-                      )
-                    )}{' '}
-                    calories
-                  </Typography>
-                )}
+              {beerjson?.final_gravity && (
+                <Typography variant="body1">
+                  <Box component="span" fontWeight="bold">
+                    Calories:
+                  </Box>{' '}
+                  {Math.round(
+                    calcCalories(
+                      beerjson?.original_gravity.value,
+                      beerjson?.final_gravity?.value
+                    )
+                  )}{' '}
+                  calories
+                </Typography>
+              )}
             </Paper>
 
             <Divider />
