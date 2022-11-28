@@ -4,6 +4,7 @@ import { supabase } from '../utils/supabase'
 import {
   Alert,
   Box,
+  Button,
   LinearProgress,
   Container,
   Typography,
@@ -71,6 +72,21 @@ const Recipes = ({ session }) => {
           <Typography variant="h1" textAlign="center">
             Recipes
           </Typography>
+
+          {session.user && (
+            <Box textAlign="center" sx={{ mb: 2 }}>
+              <Button
+                variant="contained"
+                color="secondary"
+                component={NavLink}
+                to="/recipes/add"
+                sx={{ mt: 2 }}
+              >
+                Add a new recipe
+              </Button>
+            </Box>
+          )}
+
           <Table>
             <TableHead>
               <TableRow>
