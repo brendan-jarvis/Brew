@@ -320,7 +320,7 @@ const ViewRecipe = ({ session }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {beerjson?.ingredients.miscellaneous_additions.map((step) => (
+                {beerjson?.ingredients.miscellaneous_additions?.map((step) => (
                   <TableRow key={step.name + step.timing.duration.value}>
                     <TableCell>
                       {step.amount.value} {step.amount.unit}
@@ -411,7 +411,7 @@ const ViewRecipe = ({ session }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {beerjson?.ingredients.water_additions.map((water) => (
+                {beerjson?.ingredients.water_additions?.map((water) => (
                   <TableRow key={water.name}>
                     <TableCell style={{ textTransform: 'capitalize' }}>
                       {water.name}

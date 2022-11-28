@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { supabase } from '../utils/supabase'
 import {
   Alert,
@@ -16,6 +17,7 @@ const AddRecipe = ({ session }) => {
   const [username, setUsername] = useState('')
   const inputRef = useRef(null)
   const nameRef = useRef(null)
+  const navigate = useNavigate()
 
   useEffect(() => {
     getProfile()
@@ -63,6 +65,7 @@ const AddRecipe = ({ session }) => {
             recipe: JSON.parse(inputRef.current.value),
           },
         ])
+        .select()
         .single()
 
       if (error) {
@@ -70,6 +73,9 @@ const AddRecipe = ({ session }) => {
       }
 
       inputRef.current.value = ''
+
+      // Redirect to the recipes page
+      navigate(`/recipes/${data.id}`)
     } catch (error) {
       setErrorMessage(error.message)
     } finally {
