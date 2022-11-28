@@ -85,7 +85,7 @@ const ViewRecipe = ({ session }) => {
               <NavLink to={`/profiles/${recipe?.author_username}`}>
                 {recipe?.author_username}
               </NavLink>{' '}
-              on {new Date(recipe?.updated_at).toDateString()}`
+              on {new Date(recipe?.updated_at).toDateString()}
             </Typography>
           ) : (
             <>
@@ -162,7 +162,7 @@ const ViewRecipe = ({ session }) => {
                 <Box component="span" fontWeight="bold">
                   Final Gravity:
                 </Box>{' '}
-                {beerjson?.final_gravity.value} {beerjson?.final_gravity.unit}
+                {beerjson?.final_gravity?.value} {beerjson?.final_gravity?.unit}
               </Typography>
               {/* TODO: calculate brewhouse efficiency
 
@@ -175,18 +175,22 @@ const ViewRecipe = ({ session }) => {
                 </Box>{' '}
                 {beerjson?.notes}
               </Typography>
-              <Typography variant="body1">
-                <Box component="span" fontWeight="bold">
-                  Calories:
-                </Box>{' '}
-                {Math.round(
-                  calcCalories(
-                    beerjson?.original_gravity.value,
-                    beerjson?.final_gravity.value
-                  )
-                )}{' '}
-                calories
-              </Typography>
+
+              {beerjson?.final_gravity &&
+                beerjson?.original_gravity(
+                  <Typography variant="body1">
+                    <Box component="span" fontWeight="bold">
+                      Calories:
+                    </Box>{' '}
+                    {Math.round(
+                      calcCalories(
+                        beerjson?.original_gravity.value,
+                        beerjson?.final_gravity?.value
+                      )
+                    )}{' '}
+                    calories
+                  </Typography>
+                )}
             </Paper>
 
             <Divider />
