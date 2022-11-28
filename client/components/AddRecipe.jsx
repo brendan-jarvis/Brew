@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { supabase } from '../utils/supabase'
 import {
   Alert,
@@ -7,14 +7,43 @@ import {
   Container,
   Typography,
   Divider,
-  Paper,
   TextField,
 } from '@mui/material'
 
 const AddRecipe = ({ session }) => {
   const [loading, setLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState(null)
+  const [username, setUsername] = useState('')
   const inputRef = useRef('')
+  const nameRef = useRef('')
+
+  useEffect(() => {
+    getProfile()
+  }, [session])
+
+  const getProfile = async () => {
+    try {
+      setLoading(true)
+
+      let { data, error, status } = await supabase
+        .from('profiles')
+        .select(`username`)
+        .eq('id', session.user.id)
+        .single()
+
+      if (error && status !== 406) {
+        throw error
+      }
+
+      if (data) {
+        setUsername(data.username)
+      }
+    } catch (error) {
+      setErrorMessage(error.message)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const handleAddRecipe = async (e) => {
     e.preventDefault()
@@ -27,8 +56,11 @@ const AddRecipe = ({ session }) => {
         .from('recipes')
         .insert([
           {
-            name: inputRef.current.value,
             user_id: session.user.id,
+            username: username,
+            name: nameRef.current,
+            inserted_at: new Date(),
+            recipe: inputRef.current,
           },
         ])
         .single()
@@ -57,11 +89,19 @@ const AddRecipe = ({ session }) => {
       )}
       <Divider />
       <TextField
+        label="Recipe Name"
+        variant="outlined"
+        fullWidth
+        sx={{ mb: 2 }}
+        ref={nameRef}
+      />
+      <TextField
         label="BeerJSON"
         multiline
         placeholder="Paste your BeerJSON here"
         fullWidth
         maxRows={6}
+        sx={{ mb: 2 }}
         ref={inputRef}
       />
       <Button variant="contained" onClick={handleAddRecipe}>
