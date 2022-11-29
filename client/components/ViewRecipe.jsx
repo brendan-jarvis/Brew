@@ -306,41 +306,48 @@ const ViewRecipe = ({ session }) => {
 
             <Divider />
 
-            <Typography variant="h2">Miscellaneous Additions</Typography>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Amount</TableCell>
-                  <TableCell>Name</TableCell>
-                  <TableCell style={{ textTransform: 'capitalize' }}>
-                    Type
-                  </TableCell>
-                  <TableCell>Use</TableCell>
-                  <TableCell>Time</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {beerjson?.ingredients.miscellaneous_additions?.map((step) => (
-                  <TableRow key={step.name + step.timing.duration.value}>
-                    <TableCell>
-                      {step.amount.value} {step.amount.unit}
-                    </TableCell>
-                    <TableCell style={{ textTransform: 'capitalize' }}>
-                      {step.name}
-                    </TableCell>
-                    <TableCell style={{ textTransform: 'capitalize' }}>
-                      {step.type}
-                    </TableCell>
-                    <TableCell style={{ textTransform: 'capitalize' }}>
-                      {step.timing.use.replaceAll('_', ' ')}
-                    </TableCell>
-                    <TableCell>
-                      {step.timing.duration.value} {step.timing.duration.unit}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+            {beerjson?.ingredients.miscellaneous_additions.length > 0 && (
+              <>
+                <Typography variant="h2">Miscellaneous Additions</Typography>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Amount</TableCell>
+                      <TableCell>Name</TableCell>
+                      <TableCell style={{ textTransform: 'capitalize' }}>
+                        Type
+                      </TableCell>
+                      <TableCell>Use</TableCell>
+                      <TableCell>Time</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {beerjson?.ingredients.miscellaneous_additions?.map(
+                      (step) => (
+                        <TableRow key={step.name + step.timing.duration.value}>
+                          <TableCell>
+                            {step.amount.value} {step.amount.unit}
+                          </TableCell>
+                          <TableCell style={{ textTransform: 'capitalize' }}>
+                            {step.name}
+                          </TableCell>
+                          <TableCell style={{ textTransform: 'capitalize' }}>
+                            {step.type}
+                          </TableCell>
+                          <TableCell style={{ textTransform: 'capitalize' }}>
+                            {step.timing.use.replaceAll('_', ' ')}
+                          </TableCell>
+                          <TableCell>
+                            {step.timing.duration.value}{' '}
+                            {step.timing.duration.unit}
+                          </TableCell>
+                        </TableRow>
+                      )
+                    )}
+                  </TableBody>
+                </Table>
+              </>
+            )}
 
             <Divider />
 
