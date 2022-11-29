@@ -103,15 +103,16 @@ const AddRecipe = ({ session }) => {
       />
       <TextField
         label="BeerJSON"
-        multiline
         placeholder="Paste your BeerJSON here"
         fullWidth
-        maxRows={6}
+        multiline
+        minRows={10}
+        maxRows={20}
         sx={{ mb: 2 }}
         inputRef={inputRef}
       />
       <Button variant="contained" onClick={handleAddRecipe}>
-        Upload Recipe
+        Add Recipe
       </Button>
     </Container>
   )
