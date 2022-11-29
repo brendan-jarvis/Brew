@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { supabase } from '../utils/supabase'
 import {
   Alert,
+  Box,
   Button,
   LinearProgress,
   Input,
@@ -96,7 +97,7 @@ const AddRecipe = ({ session }) => {
 
   return (
     <Container>
-      <Typography variant="h4" component="h1" align="center" gutterBottom>
+      <Typography variant="h4" align="center" gutterBottom>
         Add Recipe
       </Typography>
       {errorMessage && (
@@ -112,6 +113,9 @@ const AddRecipe = ({ session }) => {
         sx={{ mb: 2 }}
         inputRef={nameRef}
       />
+      <Typography variant="h6" gutterBottom>
+        Paste your BeerJSON:
+      </Typography>
       <TextField
         label="BeerJSON"
         placeholder="Paste your BeerJSON here"
@@ -123,16 +127,21 @@ const AddRecipe = ({ session }) => {
         value={beerJSON}
         onChange={handleFileChange}
       />
-      <Typography>Or upload a .json file</Typography>
+      <Typography variant="h6" gutterBottom>
+        Or upload from a .json file
+      </Typography>
       <Input
         type="file"
+        fullWidth
         sx={{ mb: 2 }}
         accept=".json"
         onChange={handleFileChange}
       />
-      <Button variant="contained" onClick={handleAddRecipe}>
-        Add Recipe
-      </Button>
+      <Box display="flex" justifyContent="center" alignItems="center">
+        <Button variant="contained" onClick={handleAddRecipe}>
+          Add Recipe
+        </Button>
+      </Box>
     </Container>
   )
 }
