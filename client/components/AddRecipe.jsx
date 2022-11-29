@@ -5,6 +5,7 @@ import {
   Alert,
   Button,
   LinearProgress,
+  Input,
   Container,
   Typography,
   Divider,
@@ -15,7 +16,7 @@ const AddRecipe = ({ session }) => {
   const [loading, setLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState(null)
   const [username, setUsername] = useState('')
-  const inputRef = useRef(null)
+  const [beerJSON, setBeerJSON] = useState('')
   const nameRef = useRef(null)
   const navigate = useNavigate()
 
@@ -47,6 +48,16 @@ const AddRecipe = ({ session }) => {
     }
   }
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0]
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      const text = e.target.result
+      setBeerJSON(text)
+    }
+    reader.readAsText(file)
+  }
+
   const handleAddRecipe = async (e) => {
     e.preventDefault()
 
@@ -62,7 +73,7 @@ const AddRecipe = ({ session }) => {
             author_username: username,
             name: nameRef.current.value,
             inserted_at: new Date(),
-            recipe: JSON.parse(inputRef.current.value),
+            recipe: JSON.parse(beerJSON),
           },
         ])
         .select()
@@ -72,7 +83,7 @@ const AddRecipe = ({ session }) => {
         throw error
       }
 
-      inputRef.current.value = ''
+      setBeerJSON('')
 
       // Redirect to the recipes page
       navigate(`/recipes/${data.id}`)
@@ -109,7 +120,15 @@ const AddRecipe = ({ session }) => {
         minRows={10}
         maxRows={20}
         sx={{ mb: 2 }}
-        inputRef={inputRef}
+        value={beerJSON}
+        onChange={handleFileChange}
+      />
+      <Typography>Or upload a .json file</Typography>
+      <Input
+        type="file"
+        sx={{ mb: 2 }}
+        accept=".json"
+        onChange={handleFileChange}
       />
       <Button variant="contained" onClick={handleAddRecipe}>
         Add Recipe
