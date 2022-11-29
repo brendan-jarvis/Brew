@@ -382,62 +382,65 @@ const ViewRecipe = ({ session }) => {
             </Table>
 
             <Divider />
-
-            <Typography variant="h2">Water Profile</Typography>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Name</TableCell>
-                  <TableCell>
-                    Calcium Ca<sup>+2</sup>
-                  </TableCell>
-                  <TableCell>
-                    Magnesium Mg<sup>+2</sup>
-                  </TableCell>
-                  <TableCell>
-                    Sodium Na<sup>+</sup>
-                  </TableCell>
-                  <TableCell>
-                    Chloride Cl<sup>-</sup>
-                  </TableCell>
-                  <TableCell>
-                    Sulfate SO<sub>4</sub>
-                    <sup>-2</sup>
-                  </TableCell>
-                  <TableCell>
-                    Bicarbonate HCO<sub>3</sub>
-                    <sup>-</sup>
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {beerjson?.ingredients.water_additions?.map((water) => (
-                  <TableRow key={water.name}>
-                    <TableCell style={{ textTransform: 'capitalize' }}>
-                      {water.name}
-                    </TableCell>
-                    <TableCell>
-                      {water.calcium.value} {water.calcium.unit}
-                    </TableCell>
-                    <TableCell>
-                      {water.magnesium.value} {water.magnesium.unit}
-                    </TableCell>
-                    <TableCell>
-                      {water.sodium.value} {water.sodium.unit}
-                    </TableCell>
-                    <TableCell>
-                      {water.chloride.value} {water.chloride.unit}
-                    </TableCell>
-                    <TableCell>
-                      {water.sulfate.value} {water.sulfate.unit}
-                    </TableCell>
-                    <TableCell>
-                      {water.bicarbonate.value} {water.bicarbonate.unit}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+            {beerjson?.ingredients.water_additions && (
+              <>
+                <Typography variant="h2">Water Profile</Typography>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Name</TableCell>
+                      <TableCell>
+                        Calcium Ca<sup>+2</sup>
+                      </TableCell>
+                      <TableCell>
+                        Magnesium Mg<sup>+2</sup>
+                      </TableCell>
+                      <TableCell>
+                        Sodium Na<sup>+</sup>
+                      </TableCell>
+                      <TableCell>
+                        Chloride Cl<sup>-</sup>
+                      </TableCell>
+                      <TableCell>
+                        Sulfate SO<sub>4</sub>
+                        <sup>-2</sup>
+                      </TableCell>
+                      <TableCell>
+                        Bicarbonate HCO<sub>3</sub>
+                        <sup>-</sup>
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {beerjson?.ingredients.water_additions?.map((water) => (
+                      <TableRow key={water.name}>
+                        <TableCell style={{ textTransform: 'capitalize' }}>
+                          {water.name}
+                        </TableCell>
+                        <TableCell>
+                          {water.calcium.value} {water.calcium.unit}
+                        </TableCell>
+                        <TableCell>
+                          {water.magnesium.value} {water.magnesium.unit}
+                        </TableCell>
+                        <TableCell>
+                          {water.sodium.value} {water.sodium.unit}
+                        </TableCell>
+                        <TableCell>
+                          {water.chloride.value} {water.chloride.unit}
+                        </TableCell>
+                        <TableCell>
+                          {water.sulfate.value} {water.sulfate.unit}
+                        </TableCell>
+                        <TableCell>
+                          {water.bicarbonate.value} {water.bicarbonate.unit}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </>
+            )}
 
             <Divider />
 
