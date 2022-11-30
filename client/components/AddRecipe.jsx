@@ -13,6 +13,8 @@ import {
   TextField,
 } from '@mui/material'
 
+import { importFromBeerXml } from 'brewcalc'
+
 const AddRecipe = ({ session }) => {
   const [loading, setLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState(null)
@@ -49,7 +51,7 @@ const AddRecipe = ({ session }) => {
     }
   }
 
-  const handleFileChange = (e) => {
+  const handleJSONFileChange = (e) => {
     const file = e.target.files[0]
     const reader = new FileReader()
     reader.onload = (e) => {
@@ -57,6 +59,19 @@ const AddRecipe = ({ session }) => {
       setBeerJSON(text)
     }
     reader.readAsText(file)
+  }
+
+  const handleXMLFileChange = (e) => {
+    const file = e.target.files[0]
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      const text = e.target.result
+      const beer = importFromBeerXml(text)
+      setBeerJSON(JSON.stringify(beer, null, 2))
+    }
+    reader.readAsText(file)
+
+    console.log(beerJSON)
   }
 
   const handleAddRecipe = async (e) => {
@@ -125,17 +140,27 @@ const AddRecipe = ({ session }) => {
         maxRows={20}
         sx={{ mb: 2 }}
         value={beerJSON}
-        onChange={handleFileChange}
+        onChange={(e) => setBeerJSON(e.target.value)}
       />
       <Typography variant="h6" gutterBottom>
-        Or upload from a .json file
+        Or upload BeerJSON file
       </Typography>
       <Input
         type="file"
         fullWidth
         sx={{ mb: 2 }}
         accept=".json"
-        onChange={handleFileChange}
+        onChange={handleJSONFileChange}
+      />
+      <Typography variant="h6" gutterBottom>
+        Or upload BeerXML file
+      </Typography>
+      <Input
+        type="file"
+        fullWidth
+        sx={{ mb: 2 }}
+        accept=".xml"
+        onChange={handleXMLFileChange}
       />
       <Box display="flex" justifyContent="center" alignItems="center">
         <Button variant="contained" onClick={handleAddRecipe}>
