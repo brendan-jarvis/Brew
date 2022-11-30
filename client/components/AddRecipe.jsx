@@ -67,7 +67,16 @@ const AddRecipe = ({ session }) => {
     reader.onload = (e) => {
       const text = e.target.result
       const beer = importFromBeerXml(text)
-      setBeerJSON(JSON.stringify(beer, null, 2))
+
+      console.log(beer.recipe)
+
+      setBeerJSON(
+        JSON.stringify(
+          { beerjson: { version: 1, recipes: [beer.recipe] } },
+          null,
+          2
+        )
+      )
     }
     reader.readAsText(file)
 
@@ -99,9 +108,6 @@ const AddRecipe = ({ session }) => {
         throw error
       }
 
-      setBeerJSON('')
-
-      // Redirect to the recipes page
       navigate(`/recipes/${data.id}`)
     } catch (error) {
       setErrorMessage(error.message)

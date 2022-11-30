@@ -128,23 +128,24 @@ const ViewRecipe = ({ session }) => {
                 <Box component="span" fontWeight="bold">
                   Style:
                 </Box>{' '}
-                {beerjson?.style.name} ({beerjson?.style.type}),{' '}
-                {beerjson?.style.style_guide +
+                {beerjson?.style?.name} ({beerjson?.style?.type}),{' '}
+                {beerjson?.style?.style_guide +
                   ' ' +
-                  beerjson?.style.category_number +
-                  beerjson?.style.style_letter}
+                  beerjson?.style?.category_number +
+                  beerjson?.style?.style_letter}
               </Typography>
               <Typography variant="body1">
                 <Box component="span" fontWeight="bold">
                   Boil Time:
                 </Box>{' '}
-                {beerjson?.boil.boil_time.value} {beerjson?.boil.boil_time.unit}
+                {beerjson?.boil?.boil_time.value}{' '}
+                {beerjson?.boil?.boil_time.unit}
               </Typography>
               <Typography variant="body1">
                 <Box component="span" fontWeight="bold">
                   Batch Size:
                 </Box>{' '}
-                {beerjson?.batch_size.value} {beerjson?.batch_size.unit}
+                {beerjson?.batch_size?.value} {beerjson?.batch_size?.unit}
               </Typography>
               {/* TODO: calculate preboil size               
                 
@@ -155,8 +156,8 @@ const ViewRecipe = ({ session }) => {
                 <Box component="span" fontWeight="bold">
                   Original Gravity:
                 </Box>{' '}
-                {beerjson?.original_gravity.value}{' '}
-                {beerjson?.original_gravity.unit}
+                {beerjson?.original_gravity?.value}{' '}
+                {beerjson?.original_gravity?.unit}
               </Typography>
               <Typography variant="body1">
                 <Box component="span" fontWeight="bold">
@@ -205,7 +206,7 @@ const ViewRecipe = ({ session }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {beerjson?.ingredients.fermentable_additions.map(
+                {beerjson?.ingredients?.fermentable_additions.map(
                   (fermentable) => (
                     <TableRow key={fermentable.name}>
                       <TableCell>
@@ -245,7 +246,7 @@ const ViewRecipe = ({ session }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {beerjson?.ingredients.hop_additions.map((hop) => (
+                {beerjson?.ingredients?.hop_additions.map((hop) => (
                   <TableRow key={hop.name + hop.timing.duration.value}>
                     <TableCell>
                       {hop.amount.value} {hop.amount.unit}
@@ -306,7 +307,7 @@ const ViewRecipe = ({ session }) => {
 
             <Divider />
 
-            {beerjson?.ingredients.miscellaneous_additions.length > 0 && (
+            {beerjson?.ingredients?.miscellaneous_additions.length > 0 && (
               <>
                 <Typography variant="h2">Miscellaneous Additions</Typography>
                 <Table>
@@ -322,7 +323,7 @@ const ViewRecipe = ({ session }) => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {beerjson?.ingredients.miscellaneous_additions?.map(
+                    {beerjson?.ingredients?.miscellaneous_additions?.map(
                       (step) => (
                         <TableRow key={step.name + step.timing.duration.value}>
                           <TableCell>
@@ -366,7 +367,7 @@ const ViewRecipe = ({ session }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {beerjson?.ingredients.culture_additions.map((culture) => (
+                {beerjson?.ingredients?.culture_additions.map((culture) => (
                   <TableRow key={culture.name}>
                     <TableCell style={{ textTransform: 'capitalize' }}>
                       {culture.name}
@@ -389,7 +390,7 @@ const ViewRecipe = ({ session }) => {
             </Table>
 
             <Divider />
-            {beerjson?.ingredients.water_additions && (
+            {beerjson?.ingredients?.water_additions && (
               <>
                 <Typography variant="h2">Water Profile</Typography>
                 <Table>
@@ -419,7 +420,7 @@ const ViewRecipe = ({ session }) => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {beerjson?.ingredients.water_additions?.map((water) => (
+                    {beerjson?.ingredients?.water_additions?.map((water) => (
                       <TableRow key={water.name}>
                         <TableCell style={{ textTransform: 'capitalize' }}>
                           {water.name}
