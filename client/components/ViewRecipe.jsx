@@ -85,7 +85,7 @@ const ViewRecipe = ({ session }) => {
               <NavLink to={`/profiles/${recipe?.author_username}`}>
                 {recipe?.author_username}
               </NavLink>{' '}
-              on {new Date(recipe?.updated_at).toDateString()}`
+              on {new Date(recipe?.updated_at).toDateString()}
             </Typography>
           ) : (
             <>
@@ -102,7 +102,7 @@ const ViewRecipe = ({ session }) => {
             </>
           )}
           <Box textAlign="center">
-            <Paper sx={{ textAlign: 'left' }}>
+            <Paper sx={{ textAlign: 'left', p: 1 }}>
               <Typography variant="h2" sx={{ textAlign: 'center' }}>
                 Stats
               </Typography>
@@ -128,23 +128,24 @@ const ViewRecipe = ({ session }) => {
                 <Box component="span" fontWeight="bold">
                   Style:
                 </Box>{' '}
-                {beerjson?.style.name} ({beerjson?.style.type}),{' '}
-                {beerjson?.style.style_guide +
+                {beerjson?.style?.name} ({beerjson?.style?.type}),{' '}
+                {beerjson?.style?.style_guide +
                   ' ' +
-                  beerjson?.style.category_number +
-                  beerjson?.style.style_letter}
+                  beerjson?.style?.category_number +
+                  beerjson?.style?.style_letter}
               </Typography>
               <Typography variant="body1">
                 <Box component="span" fontWeight="bold">
                   Boil Time:
                 </Box>{' '}
-                {beerjson?.boil.boil_time.value} {beerjson?.boil.boil_time.unit}
+                {beerjson?.boil?.boil_time.value}{' '}
+                {beerjson?.boil?.boil_time.unit}
               </Typography>
               <Typography variant="body1">
                 <Box component="span" fontWeight="bold">
                   Batch Size:
                 </Box>{' '}
-                {beerjson?.batch_size.value} {beerjson?.batch_size.unit}
+                {beerjson?.batch_size?.value} {beerjson?.batch_size?.unit}
               </Typography>
               {/* TODO: calculate preboil size               
                 
@@ -155,14 +156,14 @@ const ViewRecipe = ({ session }) => {
                 <Box component="span" fontWeight="bold">
                   Original Gravity:
                 </Box>{' '}
-                {beerjson?.original_gravity.value}{' '}
-                {beerjson?.original_gravity.unit}
+                {beerjson?.original_gravity?.value}{' '}
+                {beerjson?.original_gravity?.unit}
               </Typography>
               <Typography variant="body1">
                 <Box component="span" fontWeight="bold">
                   Final Gravity:
                 </Box>{' '}
-                {beerjson?.final_gravity.value} {beerjson?.final_gravity.unit}
+                {beerjson?.final_gravity?.value} {beerjson?.final_gravity?.unit}
               </Typography>
               {/* TODO: calculate brewhouse efficiency
 
@@ -175,18 +176,21 @@ const ViewRecipe = ({ session }) => {
                 </Box>{' '}
                 {beerjson?.notes}
               </Typography>
-              <Typography variant="body1">
-                <Box component="span" fontWeight="bold">
-                  Calories:
-                </Box>{' '}
-                {Math.round(
-                  calcCalories(
-                    beerjson?.original_gravity.value,
-                    beerjson?.final_gravity.value
-                  )
-                )}{' '}
-                calories
-              </Typography>
+
+              {beerjson?.final_gravity && (
+                <Typography variant="body1">
+                  <Box component="span" fontWeight="bold">
+                    Calories:
+                  </Box>{' '}
+                  {Math.round(
+                    calcCalories(
+                      beerjson?.original_gravity.value,
+                      beerjson?.final_gravity?.value
+                    )
+                  )}{' '}
+                  calories
+                </Typography>
+              )}
             </Paper>
 
             <Divider />
@@ -202,7 +206,7 @@ const ViewRecipe = ({ session }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {beerjson?.ingredients.fermentable_additions.map(
+                {beerjson?.ingredients?.fermentable_additions.map(
                   (fermentable) => (
                     <TableRow key={fermentable.name}>
                       <TableCell>
@@ -242,7 +246,7 @@ const ViewRecipe = ({ session }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {beerjson?.ingredients.hop_additions.map((hop) => (
+                {beerjson?.ingredients?.hop_additions.map((hop) => (
                   <TableRow key={hop.name + hop.timing.duration.value}>
                     <TableCell>
                       {hop.amount.value} {hop.amount.unit}
@@ -303,41 +307,48 @@ const ViewRecipe = ({ session }) => {
 
             <Divider />
 
-            <Typography variant="h2">Miscellaneous Additions</Typography>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Amount</TableCell>
-                  <TableCell>Name</TableCell>
-                  <TableCell style={{ textTransform: 'capitalize' }}>
-                    Type
-                  </TableCell>
-                  <TableCell>Use</TableCell>
-                  <TableCell>Time</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {beerjson?.ingredients.miscellaneous_additions.map((step) => (
-                  <TableRow key={step.name + step.timing.duration.value}>
-                    <TableCell>
-                      {step.amount.value} {step.amount.unit}
-                    </TableCell>
-                    <TableCell style={{ textTransform: 'capitalize' }}>
-                      {step.name}
-                    </TableCell>
-                    <TableCell style={{ textTransform: 'capitalize' }}>
-                      {step.type}
-                    </TableCell>
-                    <TableCell style={{ textTransform: 'capitalize' }}>
-                      {step.timing.use.replaceAll('_', ' ')}
-                    </TableCell>
-                    <TableCell>
-                      {step.timing.duration.value} {step.timing.duration.unit}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+            {beerjson?.ingredients?.miscellaneous_additions.length > 0 && (
+              <>
+                <Typography variant="h2">Miscellaneous Additions</Typography>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Amount</TableCell>
+                      <TableCell>Name</TableCell>
+                      <TableCell style={{ textTransform: 'capitalize' }}>
+                        Type
+                      </TableCell>
+                      <TableCell>Use</TableCell>
+                      <TableCell>Time</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {beerjson?.ingredients?.miscellaneous_additions?.map(
+                      (step) => (
+                        <TableRow key={step.name + step.timing.duration.value}>
+                          <TableCell>
+                            {step.amount.value} {step.amount.unit}
+                          </TableCell>
+                          <TableCell style={{ textTransform: 'capitalize' }}>
+                            {step.name}
+                          </TableCell>
+                          <TableCell style={{ textTransform: 'capitalize' }}>
+                            {step.type}
+                          </TableCell>
+                          <TableCell style={{ textTransform: 'capitalize' }}>
+                            {step.timing.use.replaceAll('_', ' ')}
+                          </TableCell>
+                          <TableCell>
+                            {step.timing.duration.value}{' '}
+                            {step.timing.duration.unit}
+                          </TableCell>
+                        </TableRow>
+                      )
+                    )}
+                  </TableBody>
+                </Table>
+              </>
+            )}
 
             <Divider />
 
@@ -356,7 +367,7 @@ const ViewRecipe = ({ session }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {beerjson?.ingredients.culture_additions.map((culture) => (
+                {beerjson?.ingredients?.culture_additions.map((culture) => (
                   <TableRow key={culture.name}>
                     <TableCell style={{ textTransform: 'capitalize' }}>
                       {culture.name}
@@ -379,62 +390,65 @@ const ViewRecipe = ({ session }) => {
             </Table>
 
             <Divider />
-
-            <Typography variant="h2">Water Profile</Typography>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Name</TableCell>
-                  <TableCell>
-                    Calcium Ca<sup>+2</sup>
-                  </TableCell>
-                  <TableCell>
-                    Magnesium Mg<sup>+2</sup>
-                  </TableCell>
-                  <TableCell>
-                    Sodium Na<sup>+</sup>
-                  </TableCell>
-                  <TableCell>
-                    Chloride Cl<sup>-</sup>
-                  </TableCell>
-                  <TableCell>
-                    Sulfate SO<sub>4</sub>
-                    <sup>-2</sup>
-                  </TableCell>
-                  <TableCell>
-                    Bicarbonate HCO<sub>3</sub>
-                    <sup>-</sup>
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {beerjson?.ingredients.water_additions.map((water) => (
-                  <TableRow key={water.name}>
-                    <TableCell style={{ textTransform: 'capitalize' }}>
-                      {water.name}
-                    </TableCell>
-                    <TableCell>
-                      {water.calcium.value} {water.calcium.unit}
-                    </TableCell>
-                    <TableCell>
-                      {water.magnesium.value} {water.magnesium.unit}
-                    </TableCell>
-                    <TableCell>
-                      {water.sodium.value} {water.sodium.unit}
-                    </TableCell>
-                    <TableCell>
-                      {water.chloride.value} {water.chloride.unit}
-                    </TableCell>
-                    <TableCell>
-                      {water.sulfate.value} {water.sulfate.unit}
-                    </TableCell>
-                    <TableCell>
-                      {water.bicarbonate.value} {water.bicarbonate.unit}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+            {beerjson?.ingredients?.water_additions && (
+              <>
+                <Typography variant="h2">Water Profile</Typography>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Name</TableCell>
+                      <TableCell>
+                        Calcium Ca<sup>+2</sup>
+                      </TableCell>
+                      <TableCell>
+                        Magnesium Mg<sup>+2</sup>
+                      </TableCell>
+                      <TableCell>
+                        Sodium Na<sup>+</sup>
+                      </TableCell>
+                      <TableCell>
+                        Chloride Cl<sup>-</sup>
+                      </TableCell>
+                      <TableCell>
+                        Sulfate SO<sub>4</sub>
+                        <sup>-2</sup>
+                      </TableCell>
+                      <TableCell>
+                        Bicarbonate HCO<sub>3</sub>
+                        <sup>-</sup>
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {beerjson?.ingredients?.water_additions?.map((water) => (
+                      <TableRow key={water.name}>
+                        <TableCell style={{ textTransform: 'capitalize' }}>
+                          {water.name}
+                        </TableCell>
+                        <TableCell>
+                          {water.calcium.value} {water.calcium.unit}
+                        </TableCell>
+                        <TableCell>
+                          {water.magnesium.value} {water.magnesium.unit}
+                        </TableCell>
+                        <TableCell>
+                          {water.sodium.value} {water.sodium.unit}
+                        </TableCell>
+                        <TableCell>
+                          {water.chloride.value} {water.chloride.unit}
+                        </TableCell>
+                        <TableCell>
+                          {water.sulfate.value} {water.sulfate.unit}
+                        </TableCell>
+                        <TableCell>
+                          {water.bicarbonate.value} {water.bicarbonate.unit}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </>
+            )}
 
             <Divider />
 
