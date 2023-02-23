@@ -34,7 +34,14 @@ function Home() {
       <Typography variant="h1" align="center">
         Welcome to Brew
       </Typography>
-      <Box sx={{ padding: '1rem' }} align="center">
+      <Box
+        sx={{
+          padding: '1rem',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
         <ImageList
           sx={{ width: 500, height: 450 }}
           variant="woven"
@@ -53,6 +60,7 @@ function Home() {
           ))}
         </ImageList>
       </Box>
+
       <Typography variant="body1" align="justify" sx={{ padding: '1rem' }}>
         This is a homebrewing app that allows you to find and keep track of your
         favourite brewing recipes. It also has a brewing calculator that will
