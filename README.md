@@ -1,3 +1,4 @@
+![Integration workflow badge.](https://github.com/brendan-jarvis/brew/workflows/Integration/badge.svg)
 [![Documentation Status](https://readthedocs.org/projects/alechemy/badge/?version=latest)](https://alechemy.readthedocs.io/en/latest/?badge=latest)
 
 # Brew
