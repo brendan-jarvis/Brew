@@ -1,3 +1,5 @@
+[![Documentation Status](https://readthedocs.org/projects/alechemy/badge/?version=latest)](https://alechemy.readthedocs.io/en/latest/?badge=latest)
+
 # Brew
 
 ### What is this?
