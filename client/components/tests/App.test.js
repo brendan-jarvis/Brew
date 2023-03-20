@@ -6,8 +6,6 @@ import App from '../App'
 import store from '../../store'
 import { fetchFavourites } from '../../actions'
 
-jest.mock('../actions')
-
 fetchFavourites.mockImplementation(() => () => {})
 
 test('App header includes Brew!', () => {
